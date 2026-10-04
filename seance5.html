@@ -22,7 +22,7 @@
       flex-direction: column;
       align-items: center;
       padding: 16px 10px 40px 10px;
-      gap: 20px;
+      gap: 24px;
     }
 
     .container {
@@ -30,7 +30,7 @@
       max-width: 860px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 24px;
     }
 
     .card-section {
@@ -38,7 +38,7 @@
       border: 1px solid #e2e8f0;
       border-radius: 16px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-      padding: 20px 16px;
+      padding: 22px 18px;
       display: flex;
       flex-direction: column;
     }
@@ -67,7 +67,7 @@
     }
 
     .section-title {
-      font-size: 20px;
+      font-size: 21px;
       font-weight: 800;
       color: #0f172a;
       letter-spacing: -0.3px;
@@ -91,36 +91,29 @@
       background: #0369a1;
     }
 
-    /* SECTION 1 : TABLEAU REPÈRE 28 LETTRES */
     .intro-text {
-      font-size: 13px;
+      font-size: 13.5px;
       color: #475569;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
+    /* ================= 1. TABLEAU REPÈRE (4 PAR LIGNE) ================= */
     .grid-letters {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
+      grid-template-columns: repeat(4, 1fr); /* 4 cases par ligne strictes */
+      gap: 8px;
       direction: rtl;
-    }
-
-    @media (min-width: 600px) {
-      .grid-letters {
-        grid-template-columns: repeat(7, 1fr);
-        gap: 8px;
-      }
     }
 
     .letter-box {
       border: 1.5px solid #cbd5e1;
-      border-radius: 8px;
+      border-radius: 10px;
       background: #ffffff;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      padding: 6px 2px;
+      padding: 10px 4px;
       text-align: center;
     }
 
@@ -131,31 +124,32 @@
 
     .ar-variants {
       font-family: 'Amiri', serif;
-      font-size: 21px;
+      font-size: 28px; /* Grand format lisible */
       color: #0f172a;
-      line-height: 1.2;
+      line-height: 1.25;
+      letter-spacing: 1.5px;
       direction: rtl;
     }
 
     .letter-name {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 600;
       color: #64748b;
-      margin-top: 2px;
+      margin-top: 3px;
       direction: ltr;
     }
 
     .tip-box {
-      font-size: 11.5px;
+      font-size: 12px;
       color: #64748b;
       background: #f8fafc;
-      padding: 8px 12px;
+      padding: 10px 14px;
       border-radius: 8px;
-      margin-top: 10px;
+      margin-top: 12px;
       border: 1px solid #e2e8f0;
     }
 
-    /* SECTION 2 : VERBES AVEC AUDIO */
+    /* ================= 2. VERBES AVEC AUDIO (4 PAR LIGNE) ================= */
     .method-strip {
       background: #f0fdf4;
       border: 1.5px solid #86efac;
@@ -195,10 +189,29 @@
 
     .words-board {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      grid-template-columns: repeat(4, 1fr); /* 4 cases par ligne strictes */
       gap: 10px;
       direction: rtl;
       margin-bottom: 16px;
+    }
+
+    /* Ajustement d'espacement sur très petits écrans mobiles */
+    @media (max-width: 500px) {
+      .words-board {
+        gap: 6px;
+      }
+      .grid-letters {
+        gap: 6px;
+      }
+      .ar-variants {
+        font-size: 21px;
+      }
+      .word-ar {
+        font-size: 28px !important;
+      }
+      .word-parts {
+        font-size: 14px !important;
+      }
     }
 
     .word-cell {
@@ -239,7 +252,7 @@
 
     .word-ar {
       font-family: 'Amiri', serif;
-      font-size: 36px;
+      font-size: 34px;
       color: #0f172a;
       line-height: 1.1;
       margin-bottom: 2px;
@@ -247,7 +260,7 @@
 
     .word-parts {
       font-family: 'Amiri', serif;
-      font-size: 17px;
+      font-size: 16.5px;
       color: #0284c7;
       direction: rtl;
     }
@@ -271,23 +284,23 @@
       color: #0369a1;
     }
 
-    /* FOOTER */
+    /* FOOTER DEMANDÉ */
     .footer-bar {
       background: #0f172a;
       color: #f8fafc;
-      padding: 12px 16px;
+      padding: 12px 18px;
       border-radius: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 12px;
+      font-size: 12.5px;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
     }
 
     .footer-actions {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
@@ -295,10 +308,14 @@
       background: #1e293b;
       color: #f1f5f9;
       border: 1px solid #334155;
-      padding: 5px 10px;
+      padding: 6px 12px;
       border-radius: 6px;
-      font-size: 11.5px;
+      font-size: 12px;
       text-decoration: none;
+      transition: background 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
 
     .btn-footer:hover {
@@ -310,7 +327,7 @@
 
   <div class="container">
 
-    <!-- ================= 1. LE GRAND TABLEAU REPÈRE ================= -->
+    <!-- ================= 1. LE GRAND TABLEAU REPÈRE (4 PAR LIGNE) ================= -->
     <div class="card-section">
       <div class="header-bar">
         <div>
@@ -323,7 +340,7 @@
       </div>
 
       <p class="intro-text">
-        Repère permanent pour vérifier la forme des lettres (début, milieu, fin) et lever les doutes pendant la lecture :
+        Panorama complet des 28 lettres dans leurs formes principales (début, milieu avec liaison, fin et terminaisons atypiques) :
       </p>
 
       <div class="grid-letters">
@@ -344,6 +361,8 @@
           <div class="ar-variants">ثَـ - ـثَـ - ـثَ</div>
           <div class="letter-name">Thâ (Tha)</div>
         </div>
+
+        <!-- Ligne 2 -->
         <div class="letter-box">
           <div class="ar-variants">جَـ - ـجَـ - ـجَ</div>
           <div class="letter-name">Jîm (Ja)</div>
@@ -356,12 +375,12 @@
           <div class="ar-variants">خَـ - ـخَـ - ـخَ</div>
           <div class="letter-name">Khâ (Khâ)</div>
         </div>
-
-        <!-- Ligne 2 -->
         <div class="letter-box highlight-bg">
           <div class="ar-variants">دَ - ـدَ - ـدَ</div>
           <div class="letter-name">Dâl (Da)</div>
         </div>
+
+        <!-- Ligne 3 -->
         <div class="letter-box highlight-bg">
           <div class="ar-variants">ذَ - ـذَ - ـذَ</div>
           <div class="letter-name">Dhâl (Dha)</div>
@@ -378,6 +397,8 @@
           <div class="ar-variants">سَـ - ـسَـ - ـسَ</div>
           <div class="letter-name">Sîn (Sa)</div>
         </div>
+
+        <!-- Ligne 4 -->
         <div class="letter-box">
           <div class="ar-variants">شَـ - ـشَـ - ـشَ</div>
           <div class="letter-name">Shîn (Sha)</div>
@@ -386,8 +407,6 @@
           <div class="ar-variants">صَـ - ـصَـ - ـصَ</div>
           <div class="letter-name">Sâd (Sâ)</div>
         </div>
-
-        <!-- Ligne 3 -->
         <div class="letter-box">
           <div class="ar-variants">ضَـ - ـضَـ - ـضَ</div>
           <div class="letter-name">Dâd (Dâ)</div>
@@ -396,6 +415,8 @@
           <div class="ar-variants">طَـ - ـطَـ - ـطَ</div>
           <div class="letter-name">Tâ' (Tâ)</div>
         </div>
+
+        <!-- Ligne 5 -->
         <div class="letter-box">
           <div class="ar-variants">ظَـ - ـظَـ - ـظَ</div>
           <div class="letter-name">Zhâ' (Zhâ)</div>
@@ -412,12 +433,12 @@
           <div class="ar-variants">فَـ - ـفَـ - ـفَ</div>
           <div class="letter-name">Fâ (Fa)</div>
         </div>
+
+        <!-- Ligne 6 -->
         <div class="letter-box">
           <div class="ar-variants">قَـ - ـقَـ - ـقَ</div>
           <div class="letter-name">Qâf (Qâ)</div>
         </div>
-
-        <!-- Ligne 4 -->
         <div class="letter-box">
           <div class="ar-variants">كَـ - ـكَـ - ـكَ</div>
           <div class="letter-name">Kâf (Ka)</div>
@@ -430,6 +451,8 @@
           <div class="ar-variants">مَـ - ـمَـ - ـمَ</div>
           <div class="letter-name">Mîm (Ma)</div>
         </div>
+
+        <!-- Ligne 7 -->
         <div class="letter-box">
           <div class="ar-variants">نَـ - ـنَـ - ـنَ</div>
           <div class="letter-name">Nûn (Na)</div>
@@ -453,12 +476,12 @@
       </div>
     </div>
 
-    <!-- ================= 2. L'ATELIER AUDIO DES VERBES ================= -->
+    <!-- ================= 2. L'ATELIER AUDIO DES VERBES (4 PAR LIGNE) ================= -->
     <div class="card-section">
       <div class="header-bar">
         <div>
-          <span class="badge-session">🎧 Page 2 • Atelier Audio</span>
-          <h2 class="section-title">Lecture Guidée : 24 Verbes avec Fatha</h2>
+          <span class="badge-session">🎧 Page 2 • Atelier Audio Interactif</span>
+          <h2 class="section-title">Lecture Continue : 24 Verbes avec Fatha</h2>
         </div>
       </div>
 
@@ -473,17 +496,24 @@
         </div>
       </div>
 
-      <!-- Grille des mots -->
+      <!-- Grille des 24 verbes (4 par ligne) -->
       <div class="words-board" id="wordsContainer"></div>
 
-      <!-- Footer partagé -->
+      <!-- Footer conforme aux 3 liens demandés -->
       <div class="footer-bar">
         <div>
-          <span>☁️ Google Drive :</span>
+          <span>☁️ Espace Drive Écolier :</span>
         </div>
         <div class="footer-actions">
-          <a href="https://drive.google.com/drive/folders/1qRy1tykxToM94UQPvGXDc1Ub4il6IQqD?usp=drive_link" target="_blank" class="btn-footer">📷 2. Photos écriture</a>
-          <a href="https://drive.google.com/drive/folders/1cQT0e1n81IPTUGHvInQFnZZ8BOkzgL0i?usp=drive_link" target="_blank" class="btn-footer">🎙️️ 3. Audios</a>
+          <a href="https://drive.google.com/file/d/17HHNYVLI8wZtS2O01bhUQbuLBLizPBY8/view" target="_blank" class="btn-footer">
+            📄 Fiche Complète
+          </a>
+          <a href="https://drive.google.com/drive/folders/1qRy1tykxToM94UQPvGXDc1Ub4il6IQqD?usp=drive_link" target="_blank" class="btn-footer">
+            📷 2. Photos
+          </a>
+          <a href="https://drive.google.com/drive/folders/1cQT0e1n81IPTUGHvInQFnZZ8BOkzgL0i?usp=drive_link" target="_blank" class="btn-footer">
+            🎙️ 3. Audios
+          </a>
         </div>
       </div>
     </div>
@@ -507,7 +537,7 @@
       { ar: 'عَبَسَ', parts: 'عَ + بَ + سَ', ph: '\'A-ba-sa', fr: 'Froncer' },
       { ar: 'مَسَحَ', parts: 'مَ + سَ + حَ', ph: 'Ma-sa-ha', fr: 'Essuyer' },
       { ar: 'مَنَحَ', parts: 'مَ + نَ + حَ', ph: 'Ma-na-ha', fr: 'Accorder' },
-      { ar: 'نَشَرَ', parts: 'نَ + شَ + رَ', ph: 'Na-sha-ra', fr: 'Publier' },
+      { ar: 'نَشَرَ', parts: 'نَ + شَ + رَ', ph: 'Na-sha-ra', phFr: 'Publier' },
       { ar: 'ضَرَبَ', parts: 'ضَ + رَ + بَ', ph: 'Da-ra-ba', fr: 'Frapper' },
       { ar: 'ظَهَرَ', parts: 'ظَ + هَ + رَ', ph: 'Zha-ha-ra', fr: 'Apparaître' },
       { ar: 'نَهَرَ', parts: 'نَ + هَ + رَ', ph: 'Na-ha-ra', fr: 'Réprimander' },
