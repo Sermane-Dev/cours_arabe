@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Séance 5 — Entraînement Audio Interactif</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;600;700;800&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f8fafc;
+      color: #0f172a;
+      padding: 20px 14px;
+      display: flex;
+      justify-content: center;
+      direction: ltr; /* Interface en français */
+    }
+
+    .container {
+      width: 100%;
+      max-width: 860px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 22px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    }
+
+    /* En-tête */
+    .header {
+      border-bottom: 2px solid #0284c7;
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+    }
+
+    .badge-session {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      margin-bottom: 8px;
+    }
+
+    .title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    /* Bandeau d'instruction */
+    .instruction-card {
+      background: #f0fdf4;
+      border: 1.5px solid #86efac;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13.5px;
+      color: #166534;
+    }
+
+    .instruction-card span.icon {
+      font-size: 24px;
+    }
+
+    /* Grille des mots */
+    .words-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 12px;
+      direction: rtl; /* Pour l'arabe */
+    }
+
+    .word-card {
+      background: #ffffff;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 10px;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .word-card:hover {
+      border-color: #0284c7;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.1);
+    }
+
+    .word-card:active {
+      transform: scale(0.97);
+    }
+
+    .word-card.bonus {
+      background: #fdfaf2;
+      border-color: #fde68a;
+    }
+
+    /* Animation quand la voix parle */
+    .word-card.speaking {
+      border-color: #10b981 !important;
+      background: #ecfdf5 !important;
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
+    }
+
+    .word-ar {
+      font-family: 'Amiri', serif;
+      font-size: 38px;
+      color: #0f172a;
+      line-height: 1.1;
+      margin-bottom: 2px;
+    }
+
+    .word-parts {
+      font-family: 'Amiri', serif;
+      font-size: 18px;
+      color: #0284c7;
+      direction: rtl;
+    }
+
+    .word-info {
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 12px;
+      color: #64748b;
+      direction: ltr;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .audio-btn {
+      font-size: 13px;
+      background: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 6px;
+      color: #0369a1;
+      font-weight: 600;
+    }
+
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <span class="badge-session">🎧 Entraînement Interactif • Séance 5</span>
+      <h1 class="title">Lecture Guidée : 24 Verbes avec Fatha</h1>
+      <p class="subtitle">Clique sur n'importe quel verbe pour écouter sa prononciation correcte.</p>
+    </div>
+
+    <div class="instruction-card">
+      <span class="icon">🔊</span>
+      <div>
+        <b>Astuce de travail :</b> Écoute d'abord le mot, répète-le en suivant la méthode en 3 temps, puis réécoute pour valider ta prononciation !
+      </div>
+    </div>
+
+    <!-- Grille des mots -->
+    <div class="words-grid">
+
+      <!-- Les 18 mots du cours -->
+      <div class="word-card" onclick="prononcer(this, 'ثَقَبَ')">
+        <div class="word-ar">ثَقَبَ</div>
+        <div class="word-parts">ثَ + قَ + بَ</div>
+        <div class="word-info">
+          <span>Tha-qa-ba</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'نَجَحَ')">
+        <div class="word-ar">نَجَحَ</div>
+        <div class="word-parts">نَ + جَ + حَ</div>
+        <div class="word-info">
+          <span>Na-ja-ha</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'دَرَسَ')">
+        <div class="word-ar">دَرَسَ</div>
+        <div class="word-parts">دَ + رَ + سَ</div>
+        <div class="word-info">
+          <span>Da-ra-sa</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'أَكَلَ')">
+        <div class="word-ar">أَكَلَ</div>
+        <div class="word-parts">أَ + كَ + لَ</div>
+        <div class="word-info">
+          <span>'A-ka-la</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'ذَهَبَ')">
+        <div class="word-ar">ذَهَبَ</div>
+        <div class="word-parts">ذَ + هَ + بَ</div>
+        <div class="word-info">
+          <span>Dha-ha-ba</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'خَرَجَ')">
+        <div class="word-ar">خَرَجَ</div>
+        <div class="word-parts">خَ + رَ + جَ</div>
+        <div class="word-info">
+          <span>Kha-ra-ja</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'رَكَعَ')">
+        <div class="word-ar">رَكَعَ</div>
+        <div class="word-parts">رَ + كَ + عَ</div>
+        <div class="word-info">
+          <span>Ra-ka-'a</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'سَجَدَ')">
+        <div class="word-ar">سَجَدَ</div>
+        <div class="word-parts">سَ + جَ + دَ</div>
+        <div class="word-info">
+          <span>Sa-ja-da</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'نَظَرَ')">
+        <div class="word-ar">نَظَرَ</div>
+        <div class="word-parts">نَ + ظَ + رَ</div>
+        <div class="word-info">
+          <span>Na-zha-ra</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'أَمَرَ')">
+        <div class="word-ar">أَمَرَ</div>
+        <div class="word-parts">أَ + مَ + رَ</div>
+        <div class="word-info">
+          <span>'A-ma-ra</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'نَهَضَ')">
+        <div class="word-ar">نَهَضَ</div>
+        <div class="word-parts">نَ + هَ + ضَ</div>
+        <div class="word-info">
+          <span>Na-ha-da</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'عَبَسَ')">
+        <div class="word-ar">عَبَسَ</div>
+        <div class="word-parts">عَ + بَ + سَ</div>
+        <div class="word-info">
+          <span>'A-ba-sa</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'مَسَحَ')">
+        <div class="word-ar">مَسَحَ</div>
+        <div class="word-parts">مَ + سَ + حَ</div>
+        <div class="word-info">
+          <span>Ma-sa-ha</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'مَنَحَ')">
+        <div class="word-ar">مَنَحَ</div>
+        <div class="word-parts">مَ + نَ + حَ</div>
+        <div class="word-info">
+          <span>Ma-na-ha</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'نَشَرَ')">
+        <div class="word-ar">نَشَرَ</div>
+        <div class="word-parts">نَ + شَ + رَ</div>
+        <div class="word-info">
+          <span>Na-sha-ra</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'ضَرَبَ')">
+        <div class="word-ar">ضَرَبَ</div>
+        <div class="word-parts">ضَ + رَ + بَ</div>
+        <div class="word-info">
+          <span>Da-ra-ba</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'ظَهَرَ')">
+        <div class="word-ar">ظَهَرَ</div>
+        <div class="word-parts">ظَ + هَ + رَ</div>
+        <div class="word-info">
+          <span>Zha-ha-ra</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'نَهَرَ')">
+        <div class="word-ar">نَهَرَ</div>
+        <div class="word-parts">نَ + هَ + رَ</div>
+        <div class="word-info">
+          <span>Na-ha-ra</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <!-- Mots Bonus -->
+      <div class="word-card bonus" onclick="prononcer(this, 'زَرَعَ')">
+        <div class="word-ar">زَرَعَ</div>
+        <div class="word-parts">زَ + رَ + عَ</div>
+        <div class="word-info">
+          <span>Za-ra-'a ★</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card bonus" onclick="prononcer(this, 'طَلَبَ')">
+        <div class="word-ar">طَلَبَ</div>
+        <div class="word-parts">طَ + لَ + بَ</div>
+        <div class="word-info">
+          <span>Ta-la-ba ★</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card bonus" onclick="prononcer(this, 'فَتَحَ')">
+        <div class="word-ar">فَتَحَ</div>
+        <div class="word-parts">فَ + تَ + حَ</div>
+        <div class="word-info">
+          <span>Fa-ta-ha ★</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card bonus" onclick="prononcer(this, 'حَصَدَ')">
+        <div class="word-ar">حَصَدَ</div>
+        <div class="word-parts">حَ + صَ + دَ</div>
+        <div class="word-info">
+          <span>Ha-sa-da ★</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card bonus" onclick="prononcer(this, 'قَرَأَ')">
+        <div class="word-ar">قَرَأَ</div>
+        <div class="word-parts">قَ + رَ + أَ</div>
+        <div class="word-info">
+          <span>Qa-ra-'a ★</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card bonus" onclick="prononcer(this, 'بَلَغَ')">
+        <div class="word-ar">بَلَغَ</div>
+        <div class="word-parts">بَ + لَ + غَ</div>
+        <div class="word-info">
+          <span>Ba-la-gha ★</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer">
+      Support Pédagogique Particulier • Synthèse Vocale Arabe Native
+    </div>
+  </div>
+
+  <script>
+    let synth = window.speechSynthesis;
+    let arabicVoice = null;
+
+    // Charger les voix installées sur l'appareil
+    function loadVoices() {
+      let voices = synth.getVoices();
+      // Chercher une voix arabe disponible (ar-SA, ar-EG, etc.)
+      arabicVoice = voices.find(v => v.lang.startsWith('ar')) || null;
+    }
+
+    if (speechSynthesis.onvoiceschanged !== undefined) {
+      speechSynthesis.onvoiceschanged = loadVoices;
+    }
+    loadVoices();
+
+    function prononcer(element, texte) {
+      if (!('speechSynthesis' in window)) {
+        alert("La synthèse vocale n'est pas supportée par votre navigateur.");
+        return;
+      }
+
+      // Stopper la lecture en cours s'il y en a une
+      synth.cancel();
+
+      let utterance = new SpeechSynthesisUtterance(texte);
+      utterance.lang = 'ar-SA'; // Arabe standard
+      utterance.rate = 0.85;    // Vitesse légèrement ralentie pour bien décomposer
+
+      if (arabicVoice) {
+        utterance.voice = arabicVoice;
+      }
+
+      // Animation visuelle pendant la parole
+      document.querySelectorAll('.word-card').forEach(c => c.classList.remove('speaking'));
+      element.classList.add('speaking');
+
+      utterance.onend = function() {
+        element.classList.remove('speaking');
+      };
+
+      utterance.onerror = function() {
+        element.classList.remove('speaking');
+      };
+
+      synth.speak(utterance);
+    }
+  </script>
+</body>
+</html>
