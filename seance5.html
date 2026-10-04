@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Séance 5 — Entraînement & Lecture Fluide</title>
+  <title>Séance 5 — Entraînement Audio Interactif</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;600;700;800&display=swap');
 
     * {
       box-sizing: border-box;
@@ -16,243 +16,121 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #f1f5f9;
+      background-color: #f8fafc;
       color: #0f172a;
+      padding: 20px 14px;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 16px 10px 40px 10px;
-      gap: 24px;
+      justify-content: center;
+      direction: ltr; /* Interface en français */
     }
 
     .container {
       width: 100%;
       max-width: 860px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .card-section {
       background: #ffffff;
       border: 1px solid #e2e8f0;
       border-radius: 16px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-      padding: 22px 18px;
-      display: flex;
-      flex-direction: column;
+      padding: 22px;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
     }
 
     /* En-tête */
-    .header-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .header {
       border-bottom: 2px solid #0284c7;
-      padding-bottom: 12px;
-      margin-bottom: 14px;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .badge-session {
-      background: #e0f2fe;
-      color: #0369a1;
-      font-size: 11.5px;
-      font-weight: 700;
-      padding: 3px 10px;
-      border-radius: 9999px;
-      display: inline-block;
-      margin-bottom: 4px;
-    }
-
-    .section-title {
-      font-size: 21px;
-      font-weight: 800;
-      color: #0f172a;
-      letter-spacing: -0.3px;
-    }
-
-    .btn-pdf {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: #0284c7;
-      color: #ffffff;
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: background 0.15s ease;
-    }
-
-    .btn-pdf:hover {
-      background: #0369a1;
-    }
-
-    .intro-text {
-      font-size: 13.5px;
-      color: #475569;
-      margin-bottom: 12px;
-    }
-
-    /* ================= 1. TABLEAU REPÈRE (4 PAR LIGNE) ================= */
-    .grid-letters {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr); /* 4 cases par ligne strictes */
-      gap: 8px;
-      direction: rtl;
-    }
-
-    .letter-box {
-      border: 1.5px solid #cbd5e1;
-      border-radius: 10px;
-      background: #ffffff;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 10px 4px;
-      text-align: center;
-    }
-
-    .letter-box.highlight-bg {
-      background: #f8fafc;
-      border-color: #94a3b8;
-    }
-
-    .ar-variants {
-      font-family: 'Amiri', serif;
-      font-size: 28px; /* Grand format lisible */
-      color: #0f172a;
-      line-height: 1.25;
-      letter-spacing: 1.5px;
-      direction: rtl;
-    }
-
-    .letter-name {
-      font-size: 11px;
-      font-weight: 600;
-      color: #64748b;
-      margin-top: 3px;
-      direction: ltr;
-    }
-
-    .tip-box {
-      font-size: 12px;
-      color: #64748b;
-      background: #f8fafc;
-      padding: 10px 14px;
-      border-radius: 8px;
-      margin-top: 12px;
-      border: 1px solid #e2e8f0;
-    }
-
-    /* ================= 2. VERBES AVEC AUDIO (4 PAR LIGNE) ================= */
-    .method-strip {
-      background: #f0fdf4;
-      border: 1.5px solid #86efac;
-      border-radius: 10px;
-      padding: 10px 14px;
-      margin-bottom: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .method-title {
-      font-size: 12.5px;
-      font-weight: 800;
-      color: #166534;
-      text-transform: uppercase;
-    }
-
-    .method-steps {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      color: #14532d;
-      flex-wrap: wrap;
-    }
-
-    .step-pill {
-      background: #ffffff;
-      border: 1px solid #86efac;
-      padding: 2px 7px;
-      border-radius: 6px;
-      font-weight: 600;
-    }
-
-    .words-board {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr); /* 4 cases par ligne strictes */
-      gap: 10px;
-      direction: rtl;
+      padding-bottom: 14px;
       margin-bottom: 16px;
     }
 
-    /* Ajustement d'espacement sur très petits écrans mobiles */
-    @media (max-width: 500px) {
-      .words-board {
-        gap: 6px;
-      }
-      .grid-letters {
-        gap: 6px;
-      }
-      .ar-variants {
-        font-size: 21px;
-      }
-      .word-ar {
-        font-size: 28px !important;
-      }
-      .word-parts {
-        font-size: 14px !important;
-      }
+    .badge-session {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 9999px;
+      margin-bottom: 8px;
     }
 
-    .word-cell {
+    .title {
+      font-size: 24px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    /* Bandeau d'instruction */
+    .instruction-card {
+      background: #f0fdf4;
+      border: 1.5px solid #86efac;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13.5px;
+      color: #166534;
+    }
+
+    .instruction-card span.icon {
+      font-size: 24px;
+    }
+
+    /* Grille des mots */
+    .words-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 12px;
+      direction: rtl; /* Pour l'arabe */
+    }
+
+    .word-card {
+      background: #ffffff;
       border: 2px solid #e2e8f0;
       border-radius: 12px;
-      background: #ffffff;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      padding: 12px 6px;
+      padding: 14px 10px;
       text-align: center;
       cursor: pointer;
       user-select: none;
       transition: all 0.15s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
     }
 
-    .word-cell:hover {
+    .word-card:hover {
       border-color: #0284c7;
       transform: translateY(-2px);
       box-shadow: 0 4px 12px rgba(2, 132, 199, 0.1);
     }
 
-    .word-cell:active {
+    .word-card:active {
       transform: scale(0.97);
     }
 
-    .word-cell.bonus {
+    .word-card.bonus {
       background: #fdfaf2;
       border-color: #fde68a;
     }
 
-    .word-cell.speaking {
+    /* Animation quand la voix parle */
+    .word-card.speaking {
       border-color: #10b981 !important;
       background: #ecfdf5 !important;
-      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.25);
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2);
     }
 
     .word-ar {
       font-family: 'Amiri', serif;
-      font-size: 34px;
+      font-size: 38px;
       color: #0f172a;
       line-height: 1.1;
       margin-bottom: 2px;
@@ -260,337 +138,328 @@
 
     .word-parts {
       font-family: 'Amiri', serif;
-      font-size: 16.5px;
+      font-size: 18px;
       color: #0284c7;
       direction: rtl;
     }
 
     .word-info {
-      margin-top: 4px;
-      font-size: 11px;
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 12px;
       color: #64748b;
       direction: ltr;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-weight: 500;
+      font-family: 'Inter', sans-serif;
     }
 
-    .audio-icon {
+    .audio-btn {
+      font-size: 13px;
       background: #f1f5f9;
-      padding: 1px 5px;
-      border-radius: 4px;
-      font-size: 11px;
-      color: #0369a1;
-    }
-
-    /* FOOTER DEMANDÉ */
-    .footer-bar {
-      background: #0f172a;
-      color: #f8fafc;
-      padding: 12px 18px;
-      border-radius: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12.5px;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .footer-actions {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .btn-footer {
-      background: #1e293b;
-      color: #f1f5f9;
-      border: 1px solid #334155;
-      padding: 6px 12px;
+      padding: 2px 8px;
       border-radius: 6px;
-      font-size: 12px;
-      text-decoration: none;
-      transition: background 0.15s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
+      color: #0369a1;
+      font-weight: 600;
     }
 
-    .btn-footer:hover {
-      background: #334155;
+    .footer {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 12px;
+      color: #94a3b8;
     }
   </style>
 </head>
 <body>
 
   <div class="container">
+    <div class="header">
+      <span class="badge-session">🎧 Entraînement Interactif • Séance 5</span>
+      <h1 class="title">Lecture Guidée : 24 Verbes avec Fatha</h1>
+      <p class="subtitle">Clique sur n'importe quel verbe pour écouter sa prononciation correcte.</p>
+    </div>
 
-    <!-- ================= 1. LE GRAND TABLEAU REPÈRE (4 PAR LIGNE) ================= -->
-    <div class="card-section">
-      <div class="header-bar">
-        <div>
-          <span class="badge-session">⚡ Page 1 • Repère Graphique</span>
-          <h1 class="section-title">Tableau Repère des 28 Lettres (Fatha)</h1>
-        </div>
-        <a href="https://drive.google.com/file/d/17HHNYVLI8wZtS2O01bhUQbuLBLizPBY8/view" target="_blank" class="btn-pdf">
-          📄 Fiche Complète (10 Slides)
-        </a>
-      </div>
-
-      <p class="intro-text">
-        Panorama complet des 28 lettres dans leurs formes principales (début, milieu avec liaison, fin et terminaisons atypiques) :
-      </p>
-
-      <div class="grid-letters">
-        <!-- Ligne 1 -->
-        <div class="letter-box highlight-bg">
-          <div class="ar-variants">أَ - ـأَ - ـأَ - ءَ</div>
-          <div class="letter-name">Alif (A)</div>
-        </div>
-        <div class="letter-box">
-          <div class="ar-variants">بَـ - ـبَـ - ـبَ</div>
-          <div class="letter-name">Bâ (Ba)</div>
-        </div>
-        <div class="letter-box highlight-bg">
-          <div class="ar-variants">تَـ - ـتَـ - ـتَ - ـةَ - ةَ</div>
-          <div class="letter-name">Tâ (Ta)</div>
-        </div>
-        <div class="letter-box">
-          <div class="ar-variants">ثَـ - ـثَـ - ـثَ</div>
-          <div class="letter-name">Thâ (Tha)</div>
-        </div>
-
-        <!-- Ligne 2 -->
-        <div class="letter-box">
-          <div class="ar-variants">جَـ - ـجَـ - ـجَ</div>
-          <div class="letter-name">Jîm (Ja)</div>
-        </div>
-        <div class="letter-box">
-          <div class="ar-variants">حَـ - ـحَـ - ـحَ</div>
-          <div class="letter-name">Hâ (Ha)</div>
-        </div>
-        <div class="letter-box">
-          <div class="ar-variants">خَـ - ـخَـ - ـخَ</div>
-          <div class="letter-name">Khâ (Khâ)</div>
-        </div>
-        <div class="letter-box highlight-bg">
-          <div class="ar-variants">دَ - ـدَ - ـدَ</div>
-          <div class="letter-name">Dâl (Da)</div>
-        </div>
-
-        <!-- Ligne 3 -->
-        <div class="letter-box highlight-bg">
-          <div class="ar-variants">ذَ - ـذَ - ـذَ</div>
-          <div class="letter-name">Dhâl (Dha)</div>
-        </div>
-        <div class="letter-box highlight-bg">
-          <div class="ar-variants">رَ - ـرَ - ـرَ</div>
-          <div class="letter-name">Râ (Râ)</div>
-        </div>
-        <div class="letter-box highlight-bg">
-          <div class="ar-variants">زَ - ـزَ - ـزَ</div>
-          <div class="letter-name">Zây (Za)</div>
-        </div>
-        <div class="letter-box">
-          <div class="ar-variants">سَـ - ـسَـ - ـسَ</div>
-          <div class="letter-name">Sîn (Sa)</div>
-        </div>
-
-        <!-- Ligne 4 -->
-        <div class="letter-box">
-          <div class="ar-variants">شَـ - ـشَـ - ـشَ</div>
-          <div class="letter-name">Shîn (Sha)</div>
-        </div>
-        <div class="letter-box">
-          <div class="ar-variants">صَـ - ـصَـ - ـصَ</div>
-          <div class="letter-name">Sâd (Sâ)</div>
-        </div>
-        <div class="letter-box">
-          <div class="ar-variants">ضَـ - ـضَـ - ـضَ</div>
-          <div class="letter-name">Dâd (Dâ)</div>
-        </div>
-        <div class="letter-box">
-          <div class="ar-variants">طَـ - ـطَـ - ـطَ</div>
-          <div class="letter-name">Tâ' (Tâ)</div>
-        </div>
-
-        <!-- Ligne 5 -->
-        <div class="letter-box">
-          <div class="ar-variants">ظَـ - ـظَـ - ـظَ</div>
-          <div class="letter-name">Zhâ' (Zhâ)</div>
-        </div>
-        <div class="letter-box">
-          <div class="ar-variants">عَـ - ـعَـ - ـعَ</div>
-          <div class="letter-name">'Ayn ('A)</div>
-        </div>
-        <div class="letter-box">
-          <div class="ar-variants">غَـ - ـغَـ - ـغَ</div>
-          <div class="letter-name">Ghayn (Ghâ)</div>
-        </div>
-        <div class="letter-box">
-          <div class="ar-variants">فَـ - ـفَـ - ـفَ</div>
-          <div class="letter-name">Fâ (Fa)</div>
-        </div>
-
-        <!-- Ligne 6 -->
-        <div class="letter-box">
-          <div class="ar-variants">قَـ - ـقَـ - ـقَ</div>
-          <div class="letter-name">Qâf (Qâ)</div>
-        </div>
-        <div class="letter-box">
-          <div class="ar-variants">كَـ - ـكَـ - ـكَ</div>
-          <div class="letter-name">Kâf (Ka)</div>
-        </div>
-        <div class="letter-box">
-          <div class="ar-variants">لَـ - ـلَـ - ـلَ</div>
-          <div class="letter-name">Lâm (La)</div>
-        </div>
-        <div class="letter-box">
-          <div class="ar-variants">مَـ - ـمَـ - ـمَ</div>
-          <div class="letter-name">Mîm (Ma)</div>
-        </div>
-
-        <!-- Ligne 7 -->
-        <div class="letter-box">
-          <div class="ar-variants">نَـ - ـنَـ - ـنَ</div>
-          <div class="letter-name">Nûn (Na)</div>
-        </div>
-        <div class="letter-box highlight-bg">
-          <div class="ar-variants">هَـ - ـهَـ - ـهَ - هَ</div>
-          <div class="letter-name">Hâ' (Ha)</div>
-        </div>
-        <div class="letter-box highlight-bg">
-          <div class="ar-variants">وَ - ـوَ - ـوَ</div>
-          <div class="letter-name">Wâw (Wa)</div>
-        </div>
-        <div class="letter-box">
-          <div class="ar-variants">يَـ - ـيَـ - ـيَ</div>
-          <div class="letter-name">Yâ' (Ya)</div>
-        </div>
-      </div>
-
-      <div class="tip-box">
-        💡 <b>Aide de lecture :</b> Les cases grisées signalent les lettres non liantes (le trait <b>ـ</b> indique qu'elles s'attachent avant, mais jamais après) et les variantes de fin (ـة, ة, ـه, ه).
+    <div class="instruction-card">
+      <span class="icon">🔊</span>
+      <div>
+        <b>Astuce de travail :</b> Écoute d'abord le mot, répète-le en suivant la méthode en 3 temps, puis réécoute pour valider ta prononciation !
       </div>
     </div>
 
-    <!-- ================= 2. L'ATELIER AUDIO DES VERBES (4 PAR LIGNE) ================= -->
-    <div class="card-section">
-      <div class="header-bar">
-        <div>
-          <span class="badge-session">🎧 Page 2 • Atelier Audio Interactif</span>
-          <h2 class="section-title">Lecture Continue : 24 Verbes avec Fatha</h2>
+    <!-- Grille des mots -->
+    <div class="words-grid">
+
+      <!-- Les 18 mots du cours -->
+      <div class="word-card" onclick="prononcer(this, 'ثَقَبَ')">
+        <div class="word-ar">ثَقَبَ</div>
+        <div class="word-parts">ثَ + قَ + بَ</div>
+        <div class="word-info">
+          <span>Tha-qa-ba</span>
+          <span class="audio-btn">🔊</span>
         </div>
       </div>
 
-      <div class="method-strip">
-        <div class="method-title">Méthode en 3 temps :</div>
-        <div class="method-steps">
-          <span class="step-pill">1. Lettre 1 + Fatha</span>
-          <span>➔</span>
-          <span class="step-pill">2. Lettre 2 + Fusion immédiate</span>
-          <span>➔</span>
-          <span class="step-pill">3. Lettre 3 + Mot d'un trait</span>
+      <div class="word-card" onclick="prononcer(this, 'نَجَحَ')">
+        <div class="word-ar">نَجَحَ</div>
+        <div class="word-parts">نَ + جَ + حَ</div>
+        <div class="word-info">
+          <span>Na-ja-ha</span>
+          <span class="audio-btn">🔊</span>
         </div>
       </div>
 
-      <!-- Grille des 24 verbes (4 par ligne) -->
-      <div class="words-board" id="wordsContainer"></div>
-
-      <!-- Footer conforme aux 3 liens demandés -->
-      <div class="footer-bar">
-        <div>
-          <span>☁️ Espace Drive Écolier :</span>
-        </div>
-        <div class="footer-actions">
-          <a href="https://drive.google.com/file/d/17HHNYVLI8wZtS2O01bhUQbuLBLizPBY8/view" target="_blank" class="btn-footer">
-            📄 Fiche Complète
-          </a>
-          <a href="https://drive.google.com/drive/folders/1qRy1tykxToM94UQPvGXDc1Ub4il6IQqD?usp=drive_link" target="_blank" class="btn-footer">
-            📷 2. Photos
-          </a>
-          <a href="https://drive.google.com/drive/folders/1cQT0e1n81IPTUGHvInQFnZZ8BOkzgL0i?usp=drive_link" target="_blank" class="btn-footer">
-            🎙️ 3. Audios
-          </a>
+      <div class="word-card" onclick="prononcer(this, 'دَرَسَ')">
+        <div class="word-ar">دَرَسَ</div>
+        <div class="word-parts">دَ + رَ + سَ</div>
+        <div class="word-info">
+          <span>Da-ra-sa</span>
+          <span class="audio-btn">🔊</span>
         </div>
       </div>
+
+      <div class="word-card" onclick="prononcer(this, 'أَكَلَ')">
+        <div class="word-ar">أَكَلَ</div>
+        <div class="word-parts">أَ + كَ + لَ</div>
+        <div class="word-info">
+          <span>'A-ka-la</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'ذَهَبَ')">
+        <div class="word-ar">ذَهَبَ</div>
+        <div class="word-parts">ذَ + هَ + بَ</div>
+        <div class="word-info">
+          <span>Dha-ha-ba</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'خَرَجَ')">
+        <div class="word-ar">خَرَجَ</div>
+        <div class="word-parts">خَ + رَ + جَ</div>
+        <div class="word-info">
+          <span>Kha-ra-ja</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'رَكَعَ')">
+        <div class="word-ar">رَكَعَ</div>
+        <div class="word-parts">رَ + كَ + عَ</div>
+        <div class="word-info">
+          <span>Ra-ka-'a</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'سَجَدَ')">
+        <div class="word-ar">سَجَدَ</div>
+        <div class="word-parts">سَ + جَ + دَ</div>
+        <div class="word-info">
+          <span>Sa-ja-da</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'نَظَرَ')">
+        <div class="word-ar">نَظَرَ</div>
+        <div class="word-parts">نَ + ظَ + رَ</div>
+        <div class="word-info">
+          <span>Na-zha-ra</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'أَمَرَ')">
+        <div class="word-ar">أَمَرَ</div>
+        <div class="word-parts">أَ + مَ + رَ</div>
+        <div class="word-info">
+          <span>'A-ma-ra</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'نَهَضَ')">
+        <div class="word-ar">نَهَضَ</div>
+        <div class="word-parts">نَ + هَ + ضَ</div>
+        <div class="word-info">
+          <span>Na-ha-da</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'عَبَسَ')">
+        <div class="word-ar">عَبَسَ</div>
+        <div class="word-parts">عَ + بَ + سَ</div>
+        <div class="word-info">
+          <span>'A-ba-sa</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'مَسَحَ')">
+        <div class="word-ar">مَسَحَ</div>
+        <div class="word-parts">مَ + سَ + حَ</div>
+        <div class="word-info">
+          <span>Ma-sa-ha</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'مَنَحَ')">
+        <div class="word-ar">مَنَحَ</div>
+        <div class="word-parts">مَ + نَ + حَ</div>
+        <div class="word-info">
+          <span>Ma-na-ha</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'نَشَرَ')">
+        <div class="word-ar">نَشَرَ</div>
+        <div class="word-parts">نَ + شَ + رَ</div>
+        <div class="word-info">
+          <span>Na-sha-ra</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'ضَرَبَ')">
+        <div class="word-ar">ضَرَبَ</div>
+        <div class="word-parts">ضَ + رَ + بَ</div>
+        <div class="word-info">
+          <span>Da-ra-ba</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'ظَهَرَ')">
+        <div class="word-ar">ظَهَرَ</div>
+        <div class="word-parts">ظَ + هَ + رَ</div>
+        <div class="word-info">
+          <span>Zha-ha-ra</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card" onclick="prononcer(this, 'نَهَرَ')">
+        <div class="word-ar">نَهَرَ</div>
+        <div class="word-parts">نَ + هَ + رَ</div>
+        <div class="word-info">
+          <span>Na-ha-ra</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <!-- Mots Bonus -->
+      <div class="word-card bonus" onclick="prononcer(this, 'زَرَعَ')">
+        <div class="word-ar">زَرَعَ</div>
+        <div class="word-parts">زَ + رَ + عَ</div>
+        <div class="word-info">
+          <span>Za-ra-'a ★</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card bonus" onclick="prononcer(this, 'طَلَبَ')">
+        <div class="word-ar">طَلَبَ</div>
+        <div class="word-parts">طَ + لَ + بَ</div>
+        <div class="word-info">
+          <span>Ta-la-ba ★</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card bonus" onclick="prononcer(this, 'فَتَحَ')">
+        <div class="word-ar">فَتَحَ</div>
+        <div class="word-parts">فَ + تَ + حَ</div>
+        <div class="word-info">
+          <span>Fa-ta-ha ★</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card bonus" onclick="prononcer(this, 'حَصَدَ')">
+        <div class="word-ar">حَصَدَ</div>
+        <div class="word-parts">حَ + صَ + دَ</div>
+        <div class="word-info">
+          <span>Ha-sa-da ★</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card bonus" onclick="prononcer(this, 'قَرَأَ')">
+        <div class="word-ar">قَرَأَ</div>
+        <div class="word-parts">قَ + رَ + أَ</div>
+        <div class="word-info">
+          <span>Qa-ra-'a ★</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
+      <div class="word-card bonus" onclick="prononcer(this, 'بَلَغَ')">
+        <div class="word-ar">بَلَغَ</div>
+        <div class="word-parts">بَ + لَ + غَ</div>
+        <div class="word-info">
+          <span>Ba-la-gha ★</span>
+          <span class="audio-btn">🔊</span>
+        </div>
+      </div>
+
     </div>
 
+    <div class="footer">
+      Support Pédagogique Particulier • Synthèse Vocale Arabe Native
+    </div>
   </div>
 
-  <!-- Script audio interactif -->
   <script>
-    const verbsList = [
-      { ar: 'ثَقَبَ', parts: 'ثَ + قَ + بَ', ph: 'Tha-qa-ba', fr: 'Percer' },
-      { ar: 'نَجَحَ', parts: 'نَ + جَ + حَ', ph: 'Na-ja-ha', fr: 'Réussir' },
-      { ar: 'دَرَسَ', parts: 'دَ + رَ + سَ', ph: 'Da-ra-sa', fr: 'Étudier' },
-      { ar: 'أَكَلَ', parts: 'أَ + كَ + لَ', ph: '\'A-ka-la', fr: 'Manger' },
-      { ar: 'ذَهَبَ', parts: 'ذَ + هَ + بَ', ph: 'Dha-ha-ba', fr: 'Partir' },
-      { ar: 'خَرَجَ', parts: 'خَ + رَ + جَ', ph: 'Kha-ra-ja', fr: 'Sortir' },
-      { ar: 'رَكَعَ', parts: 'رَ + كَ + عَ', ph: 'Ra-ka-\'a', fr: 'S\'incliner' },
-      { ar: 'سَجَدَ', parts: 'سَ + جَ + دَ', ph: 'Sa-ja-da', fr: 'Se prosterner' },
-      { ar: 'نَظَرَ', parts: 'نَ + ظَ + رَ', ph: 'Na-zha-ra', fr: 'Regarder' },
-      { ar: 'أَمَرَ', parts: 'أَ + مَ + رَ', ph: '\'A-ma-ra', fr: 'Ordonner' },
-      { ar: 'نَهَضَ', parts: 'نَ + هَ + ضَ', ph: 'Na-ha-da', fr: 'Se lever' },
-      { ar: 'عَبَسَ', parts: 'عَ + بَ + سَ', ph: '\'A-ba-sa', fr: 'Froncer' },
-      { ar: 'مَسَحَ', parts: 'مَ + سَ + حَ', ph: 'Ma-sa-ha', fr: 'Essuyer' },
-      { ar: 'مَنَحَ', parts: 'مَ + نَ + حَ', ph: 'Ma-na-ha', fr: 'Accorder' },
-      { ar: 'نَشَرَ', parts: 'نَ + شَ + رَ', ph: 'Na-sha-ra', phFr: 'Publier' },
-      { ar: 'ضَرَبَ', parts: 'ضَ + رَ + بَ', ph: 'Da-ra-ba', fr: 'Frapper' },
-      { ar: 'ظَهَرَ', parts: 'ظَ + هَ + رَ', ph: 'Zha-ha-ra', fr: 'Apparaître' },
-      { ar: 'نَهَرَ', parts: 'نَ + هَ + رَ', ph: 'Na-ha-ra', fr: 'Réprimander' },
-      // Bonus
-      { ar: 'زَرَعَ', parts: 'زَ + رَ + عَ', ph: 'Za-ra-\'a', fr: 'Semer', bonus: true },
-      { ar: 'طَلَبَ', parts: 'طَ + لَ + بَ', ph: 'Ta-la-ba', fr: 'Demander', bonus: true },
-      { ar: 'فَتَحَ', parts: 'فَ + تَ + حَ', ph: 'Fa-ta-ha', fr: 'Ouvrir', bonus: true },
-      { ar: 'حَصَدَ', parts: 'حَ + صَ + دَ', ph: 'Ha-sa-da', fr: 'Récolter', bonus: true },
-      { ar: 'قَرَأَ', parts: 'قَ + رَ + أَ', ph: 'Qa-ra-\'a', fr: 'Lire', bonus: true },
-      { ar: 'بَلَغَ', parts: 'بَ + لَ + غَ', ph: 'Ba-la-gha', fr: 'Atteindre', bonus: true }
-    ];
+    let synth = window.speechSynthesis;
+    let arabicVoice = null;
 
-    const synth = window.speechSynthesis;
-    let arVoice = null;
-
-    function initVoice() {
-      const voices = synth.getVoices();
-      arVoice = voices.find(v => v.lang.startsWith('ar')) || null;
+    // Charger les voix installées sur l'appareil
+    function loadVoices() {
+      let voices = synth.getVoices();
+      // Chercher une voix arabe disponible (ar-SA, ar-EG, etc.)
+      arabicVoice = voices.find(v => v.lang.startsWith('ar')) || null;
     }
+
     if (speechSynthesis.onvoiceschanged !== undefined) {
-      speechSynthesis.onvoiceschanged = initVoice;
+      speechSynthesis.onvoiceschanged = loadVoices;
     }
-    initVoice();
+    loadVoices();
 
-    const container = document.getElementById('wordsContainer');
-    verbsList.forEach((v, idx) => {
-      const cell = document.createElement('div');
-      cell.className = `word-cell ${v.bonus ? 'bonus' : ''}`;
-      cell.onclick = () => playWord(cell, v.ar);
+    function prononcer(element, texte) {
+      if (!('speechSynthesis' in window)) {
+        alert("La synthèse vocale n'est pas supportée par votre navigateur.");
+        return;
+      }
 
-      cell.innerHTML = `
-        <div class="word-ar">${v.ar}</div>
-        <div class="word-parts">${v.parts}</div>
-        <div class="word-info">
-          <span>${v.ph}</span>
-          <span class="audio-icon">🔊</span>
-        </div>
-      `;
-      container.appendChild(cell);
-    });
-
-    function playWord(element, text) {
+      // Stopper la lecture en cours s'il y en a une
       synth.cancel();
-      document.querySelectorAll('.word-cell').forEach(c => c.classList.remove('speaking'));
+
+      let utterance = new SpeechSynthesisUtterance(texte);
+      utterance.lang = 'ar-SA'; // Arabe standard
+      utterance.rate = 0.85;    // Vitesse légèrement ralentie pour bien décomposer
+
+      if (arabicVoice) {
+        utterance.voice = arabicVoice;
+      }
+
+      // Animation visuelle pendant la parole
+      document.querySelectorAll('.word-card').forEach(c => c.classList.remove('speaking'));
       element.classList.add('speaking');
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'ar-SA';
-      utterance.rate = 0.85;
-      if (arVoice) utterance.voice = arVoice;
+      utterance.onend = function() {
+        element.classList.remove('speaking');
+      };
 
-      utterance.onend = () => element.classList.remove('speaking');
-      utterance.onerror = () => element.classList.remove('speaking');
+      utterance.onerror = function() {
+        element.classList.remove('speaking');
+      };
 
       synth.speak(utterance);
     }
