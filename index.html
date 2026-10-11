@@ -131,14 +131,9 @@
       color: inherit;
     }
 
-    .session-card.active:hover {
-      border-color: #0284c7;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(2, 132, 199, 0.08);
-    }
-
     .session-card.active {
       border-left: 5px solid #0284c7;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.06);
     }
 
     .session-card.completed {
@@ -191,6 +186,13 @@
       white-space: nowrap;
     }
 
+    .actions-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
     .btn-open {
       background: #0284c7;
       color: #ffffff;
@@ -198,7 +200,21 @@
       border-radius: 8px;
       font-size: 13px;
       font-weight: 600;
+      text-decoration: none;
       white-space: nowrap;
+      transition: background 0.15s ease;
+    }
+
+    .btn-open:hover {
+      background: #0369a1;
+    }
+
+    .btn-purple {
+      background: #86198f;
+    }
+
+    .btn-purple:hover {
+      background: #701a75;
     }
 
     .footer-note {
@@ -243,16 +259,31 @@
     <div class="section-title" style="margin-top: 6px;">📚 Programme & Ateliers Interactifs</div>
     <div class="sessions-list">
 
-      <!-- Séance 5 (En cours / interactive) -->
-      <a href="seance5.html" class="session-card active">
+      <!-- Séance 6 (Actuelle / Deux Ateliers Interactifs) -->
+      <div class="session-card active">
         <div class="session-info">
-          <span class="session-tag">⚡ Séance 5 • En cours</span>
+          <span class="session-tag">⚡ Séance 6 • En cours</span>
+          <div class="session-name">Voyelles Brèves : Kasra (ـِ) & Damma (ـُ)</div>
+          <div class="session-desc">Tableaux repères complets et lecture de 48 verbes vocalisés avec audio.</div>
+        </div>
+        <div class="actions-group">
+          <a href="seance6_kasra.html" class="btn-open">🔹 Kasra (ـِ)</a>
+          <a href="seance6_Damma.html" class="btn-open btn-purple">🟣 Damma (ـُ)</a>
+        </div>
+      </div>
+
+      <!-- Séance 5 -->
+      <div class="session-card completed">
+        <div class="session-info">
+          <span class="session-tag">✅ Séance 5 • Terminée</span>
           <div class="session-name">Lecture Fluide : 24 Verbes avec Fatha</div>
           <div class="session-desc">Atelier audio interactif, déchiffrage continu et mots bonus.</div>
         </div>
-        <div class="session-arabic-badge">دَرَسَ • أَكَلَ</div>
-        <span class="btn-open">Ouvrir ➔</span>
-      </a>
+        <div class="actions-group">
+          <div class="session-arabic-badge" style="font-size: 20px; padding: 2px 10px;">دَرَسَ • أَكَلَ</div>
+          <a href="seance5.html" class="btn-drive" style="font-size: 12px; padding: 6px 12px;">Ouvrir l'atelier</a>
+        </div>
+      </div>
 
       <!-- Séance 4 -->
       <div class="session-card completed">
@@ -278,12 +309,12 @@
         </a>
       </div>
 
-      <!-- Séance 6 (À venir) -->
+      <!-- Séance 7 (À venir) -->
       <div class="session-card locked">
         <div class="session-info">
-          <span class="session-tag" style="color: #94a3b8;">🔒 Séance 6 • Dimanche prochain</span>
-          <div class="session-name">Approfondissement de la Lecture & Kasra / Damma</div>
-          <div class="session-desc">Bientôt disponible...</div>
+          <span class="session-tag" style="color: #94a3b8;">🔒 Séance 7 • Dimanche prochain</span>
+          <div class="session-name">Les Lettres de Prolongation (Voyelles Longues)</div>
+          <div class="session-desc">Étude des voyelles longues : Alif (ا), Wâw (و), Yâ (ي) et rythme de lecture.</div>
         </div>
       </div>
 
