@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Synthèse Express — Séance 6 (La Damma)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap');
+
+    @page {
+      size: A4 portrait;
+      margin: 10mm;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f1f5f9;
+      color: #0f172a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 0;
+    }
+
+    .page {
+      width: 210mm;
+      min-height: 297mm;
+      background: #ffffff;
+      padding: 14mm 16mm;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      position: relative;
+    }
+
+    .header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #86198f;
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+    }
+
+    .badge-session {
+      background: #fdf4ff;
+      color: #86198f;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      display: inline-block;
+      margin-bottom: 4px;
+    }
+
+    .page-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.3px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+
+    .btn-outline {
+      background: #ffffff;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+
+    .btn-primary {
+      background: #86198f;
+      color: #ffffff;
+      border: 1px solid #86198f;
+    }
+
+    .guide-strip {
+      background: #fdf4ff;
+      border-left: 4px solid #86198f;
+      padding: 7px 12px;
+      font-size: 12px;
+      color: #334155;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .method-strip {
+      background: #fdf2f8;
+      border: 1.5px solid #fbcfe8;
+      border-radius: 8px;
+      padding: 7px 12px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .method-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #9d174d;
+      text-transform: uppercase;
+    }
+
+    .method-steps {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      color: #831843;
+    }
+
+    .step-pill {
+      background: #ffffff;
+      border: 1px solid #f472b6;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-weight: 600;
+    }
+
+    /* Grille 28 lettres (4 col x 7 lignes) */
+    .grid-alphabet {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(7, 1fr);
+      gap: 7px;
+      direction: rtl;
+      flex: 1;
+      margin-bottom: 10px;
+    }
+
+    .letter-box {
+      border: 1.5px solid #cbd5e1;
+      border-radius: 9px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3px 6px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .letter-box:hover {
+      border-color: #86198f;
+      background: #fdf4ff;
+      transform: translateY(-1px);
+    }
+
+    .letter-box.highlight {
+      background: #fef2f2;
+      border-color: #fca5a5;
+    }
+
+    .ar-variants {
+      font-family: 'Amiri', serif;
+      font-size: 23px;
+      color: #0f172a;
+      line-height: 1.15;
+      letter-spacing: 1px;
+      direction: rtl;
+    }
+
+    .letter-name {
+      font-size: 10px;
+      font-weight: 600;
+      color: #64748b;
+      margin-top: 2px;
+      direction: ltr;
+    }
+
+    /* Grille 24 Verbes (4 col x 6 lignes) */
+    .words-board {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(6, 1fr);
+      gap: 8px;
+      direction: rtl;
+      flex: 1;
+      margin-bottom: 10px;
+    }
+
+    .word-cell {
+      border: 1.5px solid #e2e8f0;
+      border-radius: 9px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 6px 4px;
+      text-align: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .word-cell:hover {
+      border-color: #86198f;
+      background: #fdf4ff;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px -1px rgba(134, 25, 143, 0.15);
+    }
+
+    .word-cell:active, .word-cell.playing, .letter-box.playing {
+      border-color: #16a34a !important;
+      background: #ecfdf5 !important;
+      transform: scale(0.98);
+    }
+
+    .audio-tag {
+      position: absolute;
+      top: 4px;
+      left: 6px;
+      font-size: 10px;
+      color: #94a3b8;
+    }
+
+    .word-cell:hover .audio-tag {
+      color: #86198f;
+    }
+
+    .word-ar {
+      font-family: 'Amiri', serif;
+      font-size: 31px;
+      color: #0f172a;
+      line-height: 1.1;
+      margin-bottom: 2px;
+    }
+
+    .word-parts {
+      font-family: 'Amiri', serif;
+      font-size: 15px;
+      color: #86198f;
+      direction: rtl;
+    }
+
+    .word-fr {
+      font-size: 9.5px;
+      color: #64748b;
+      direction: ltr;
+      font-weight: 500;
+    }
+
+    .homework-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 7px 12px;
+      margin-bottom: 8px;
+      font-size: 11px;
+      color: #334155;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-bar {
+      background: #0f172a;
+      color: #f8fafc;
+      padding: 9px 12px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+    }
+
+    .footer-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-footer {
+      background: #1e293b;
+      color: #f1f5f9;
+      border: 1px solid #334155;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 10.5px;
+      text-decoration: none;
+    }
+
+    .btn-footer:hover {
+      background: #334155;
+    }
+
+    .page-footer-note {
+      text-align: center;
+      font-size: 10px;
+      color: #94a3b8;
+      padding-top: 4px;
+    }
+
+    @media print {
+      body { background-color: transparent; padding: 0; }
+      .page { margin: 0; box-shadow: none; width: 100%; min-height: 100vh; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= PAGE 1 : TABLEAU DAMMA (28 LETTRES & POSITIONS) ================= -->
+  <div class="page">
+    <div>
+      <div class="header-bar">
+        <div>
+          <span class="badge-session">⚡ Synthèse Express • Séance 6</span>
+          <h1 class="page-title">Tableau Repère des 28 Lettres avec Damma (ـُ)</h1>
+        </div>
+        <div class="header-actions">
+          <a href="https://drive.google.com/drive/folders/1b0MfjPlFVzM5XG2ou5QduwwbKc24lFYU?usp=sharing" target="_blank" class="btn btn-outline">📁 Drive</a>
+          <a href="https://drive.google.com/file/d/1npA4voqoZrkwq41ebQouPmWJ4_sVw0Is/view?usp=drive_link" target="_blank" class="btn btn-primary">📄 Fiche Détaillée</a>
+        </div>
+      </div>
+
+      <div class="guide-strip">
+        <span>💡 <b>Règle :</b> Son [ ou ] court. Le Hamza avec Damma prend support sur Alif (أُ), sur Wâw (ـؤُـ / ـؤُ / ؤُ).</span>
+        <span style="font-size: 11px; color: #64748b;">🔊 Cliquez sur une lettre ou un mot pour écouter</span>
+      </div>
+    </div>
+
+    <div class="grid-alphabet">
+      <!-- Ligne 1 -->
+      <div class="letter-box" onclick="playAudioText('أُ', this)"><div class="ar-variants">أُ - ـؤُـ - ـؤُ - ؤُ</div><div class="letter-name">Hamza / Alif (Ou)</div></div>
+      <div class="letter-box" onclick="playAudioText('بُ', this)"><div class="ar-variants">بُـ - ـبُـ - ـبُ</div><div class="letter-name">Bâ (Bou)</div></div>
+      <div class="letter-box" onclick="playAudioText('تُ', this)"><div class="ar-variants">تُـ - ـتُـ - ـتُ - ـةُ - ةُ</div><div class="letter-name">Tâ (Tou)</div></div>
+      <div class="letter-box" onclick="playAudioText('ثُ', this)"><div class="ar-variants">ثُـ - ـثُـ - ـثُ</div><div class="letter-name">Thâ (Thou)</div></div>
+      <!-- Ligne 2 -->
+      <div class="letter-box" onclick="playAudioText('جُ', this)"><div class="ar-variants">جُـ - ـجُـ - ـجُ</div><div class="letter-name">Jîm (Jou)</div></div>
+      <div class="letter-box" onclick="playAudioText('حُ', this)"><div class="ar-variants">حُـ - ـحُـ - ـحُ</div><div class="letter-name">Hâ (Hou)</div></div>
+      <div class="letter-box" onclick="playAudioText('خُ', this)"><div class="ar-variants">خُـ - ـخُـ - ـخُ</div><div class="letter-name">Khâ (Khou)</div></div>
+      <div class="letter-box" onclick="playAudioText('دُ', this)"><div class="ar-variants">دُ - ـدُ - ـدُ</div><div class="letter-name">Dâl (Dou)</div></div>
+      <!-- Ligne 3 -->
+      <div class="letter-box" onclick="playAudioText('ذُ', this)"><div class="ar-variants">ذُ - ـذُ - ـذُ</div><div class="letter-name">Dhâl (Dhou)</div></div>
+      <div class="letter-box" onclick="playAudioText('رُ', this)"><div class="ar-variants">رُ - ـرُ - ـرُ</div><div class="letter-name">Râ (Rou)</div></div>
+      <div class="letter-box" onclick="playAudioText('زُ', this)"><div class="ar-variants">زُ - ـزُ - ـزُ</div><div class="letter-name">Zây (Zou)</div></div>
+      <div class="letter-box" onclick="playAudioText('سُ', this)"><div class="ar-variants">سُـ - ـسُـ - ـسُ</div><div class="letter-name">Sîn (Sou)</div></div>
+      <!-- Ligne 4 -->
+      <div class="letter-box" onclick="playAudioText('شُ', this)"><div class="ar-variants">شُـ - ـشُـ - ـشُ</div><div class="letter-name">Shîn (Shou)</div></div>
+      <div class="letter-box" onclick="playAudioText('صُ', this)"><div class="ar-variants">صُـ - ـصُـ - ـصُ</div><div class="letter-name">Sâd (Sou)</div></div>
+      <div class="letter-box" onclick="playAudioText('ضُ', this)"><div class="ar-variants">ضُـ - ـضُـ - ـضُ</div><div class="letter-name">Dâd (Dou)</div></div>
+      <div class="letter-box" onclick="playAudioText('طُ', this)"><div class="ar-variants">طُـ - ـطُـ - ـطُ</div><div class="letter-name">Tâ' (Tou)</div></div>
+      <!-- Ligne 5 -->
+      <div class="letter-box" onclick="playAudioText('ظُ', this)"><div class="ar-variants">ظُـ - ـظُـ - ـظُ</div><div class="letter-name">Zhâ' (Zhou)</div></div>
+      <div class="letter-box highlight" onclick="playAudioText('عُ', this)"><div class="ar-variants">عُـ - ـعُـ - ـعُ</div><div class="letter-name">'Ayn ('Ou - Gorge)</div></div>
+      <div class="letter-box highlight" onclick="playAudioText('غُ', this)"><div class="ar-variants">غُـ - ـغُـ - ـغُ</div><div class="letter-name">Ghayn (Ghou - Palais)</div></div>
+      <div class="letter-box" onclick="playAudioText('فُ', this)"><div class="ar-variants">فُـ - ـفُـ - ـفُ</div><div class="letter-name">Fâ (Fou)</div></div>
+      <!-- Ligne 6 -->
+      <div class="letter-box highlight" onclick="playAudioText('قُ', this)"><div class="ar-variants">قُـ - ـقُـ - ـقُ</div><div class="letter-name">Qâf (Qou - Luette)</div></div>
+      <div class="letter-box" onclick="playAudioText('كُ', this)"><div class="ar-variants">كُـ - ـكُـ - ـكُ</div><div class="letter-name">Kâf (Kou)</div></div>
+      <div class="letter-box" onclick="playAudioText('لُ', this)"><div class="ar-variants">لُـ - ـلُـ - ـلُ</div><div class="letter-name">Lâm (Lou)</div></div>
+      <div class="letter-box" onclick="playAudioText('مُ', this)"><div class="ar-variants">مُـ - ـمُـ - ـمُ</div><div class="letter-name">Mîm (Mou)</div></div>
+      <!-- Ligne 7 -->
+      <div class="letter-box" onclick="playAudioText('نُ', this)"><div class="ar-variants">نُـ - ـنُـ - ـنُ</div><div class="letter-name">Nûn (Nou)</div></div>
+      <div class="letter-box highlight" onclick="playAudioText('هُ', this)"><div class="ar-variants">هُـ - ـهُـ - ـهُ - هُ</div><div class="letter-name">Hâ' (Hou - Souffle)</div></div>
+      <div class="letter-box" onclick="playAudioText('وُ', this)"><div class="ar-variants">وُ - ـوُ - ـوُ</div><div class="letter-name">Wâw (Wou)</div></div>
+      <div class="letter-box" onclick="playAudioText('يُ', this)"><div class="ar-variants">يُـ - ـيُـ - ـيُ</div><div class="letter-name">Yâ' (You)</div></div>
+    </div>
+
+    <div>
+      <div class="footer-bar">
+        <span>⚠️ <b>Point d'attention :</b> Ne pas allonger la Damma (voyelle brève). Bien projeter les lèvres vers l'avant.</span>
+        <span>Page 1 / 2</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PAGE 2 : 24 VERBES DAMMA (INTERACTIFS) ================= -->
+  <div class="page">
+    <div>
+      <div class="header-bar">
+        <div>
+          <span class="badge-session">⚡ Séance 6 • Pratique de Lecture</span>
+          <h1 class="page-title">Lecture Continue : Verbes Trilitères (Damma)</h1>
+        </div>
+        <div class="header-actions">
+          <a href="https://drive.google.com/file/d/1npA4voqoZrkwq41ebQouPmWJ4_sVw0Is/view?usp=drive_link" target="_blank" class="btn btn-primary">📄 Fiche Slides PDF</a>
+        </div>
+      </div>
+
+      <div class="method-strip">
+        <div class="method-title">Méthode فُعِلَ :</div>
+        <div class="method-steps">
+          <span class="step-pill">1. Damma 1 (arrondie)</span>
+          <span>➔</span>
+          <span class="step-pill">2. Kasra 2 (basse)</span>
+          <span>➔</span>
+          <span class="step-pill">3. Fatha 3 (ouverte)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="words-board">
+      <!-- Ligne 1 -->
+      <div class="word-cell" onclick="playAudioText('بُعِدَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">بُعِدَ</div><div class="word-parts">بُ + عِ + دَ</div><div class="word-fr">Bou-'i-da (Éloigné)</div></div>
+      <div class="word-cell" onclick="playAudioText('أُكِلَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">أُكِلَ</div><div class="word-parts">أُ + كِ + لَ</div><div class="word-fr">Ou-ki-la (Mangé)</div></div>
+      <div class="word-cell" onclick="playAudioText('سُئِلَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">سُئِلَ</div><div class="word-parts">سُ + ءِ + لَ</div><div class="word-fr">Sou-'i-la (Interrogé)</div></div>
+      <div class="word-cell" onclick="playAudioText('شُرِبَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">شُرِبَ</div><div class="word-parts">شُ + رِ + بَ</div><div class="word-fr">Chou-ri-ba (Bu)</div></div>
+      <!-- Ligne 2 -->
+      <div class="word-cell" onclick="playAudioText('نُسِيَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">نُسِيَ</div><div class="word-parts">نُ + سِ + يَ</div><div class="word-fr">Nou-si-ya (Oublié)</div></div>
+      <div class="word-cell" onclick="playAudioText('دُعِيَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">دُعِيَ</div><div class="word-parts">دُ + عِ + يَ</div><div class="word-fr">Dou-'i-ya (Invité)</div></div>
+      <div class="word-cell" onclick="playAudioText('ذُهِـلَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">ذُهِـلَ</div><div class="word-parts">ذُ + هِ + لَ</div><div class="word-fr">Dhou-hi-la (Stupéfait)</div></div>
+      <div class="word-cell" onclick="playAudioText('سُمِعَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">سُمِعَ</div><div class="word-parts">سُ + مِ + عَ</div><div class="word-fr">Sou-mi-'a (Entendu)</div></div>
+      <!-- Ligne 3 -->
+      <div class="word-cell" onclick="playAudioText('رُسِمَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">رُسِمَ</div><div class="word-parts">رُ + سِ + مَ</div><div class="word-fr">Rou-si-ma (Dessiné)</div></div>
+      <div class="word-cell" onclick="playAudioText('جُمِعَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">جُمِعَ</div><div class="word-parts">جُ + مِ + عَ</div><div class="word-fr">Jou-mi-'a (Rassemblé)</div></div>
+      <div class="word-cell" onclick="playAudioText('طُرِحَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">طُرِحَ</div><div class="word-parts">طُ + رِ + حَ</div><div class="word-fr">Tou-ri-ha (Posé)</div></div>
+      <div class="word-cell" onclick="playAudioText('ضُرِبَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">ضُرِبَ</div><div class="word-parts">ضُ + رِ + بَ</div><div class="word-fr">Dou-ri-ba (Frappé)</div></div>
+      <!-- Ligne 4 -->
+      <div class="word-cell" onclick="playAudioText('هُدِيَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">هُدِيَ</div><div class="word-parts">هُ + دِ + يَ</div><div class="word-fr">Hou-di-ya (Guidé)</div></div>
+      <div class="word-cell" onclick="playAudioText('فُهِـمَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">فُهِـمَ</div><div class="word-parts">فُ + هِ + مَ</div><div class="word-fr">Fou-hi-ma (Compris)</div></div>
+      <div class="word-cell" onclick="playAudioText('كُتِبَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">كُتِبَ</div><div class="word-parts">كُ + تِ + بَ</div><div class="word-fr">Kou-ti-ba (Écrit)</div></div>
+      <div class="word-cell" onclick="playAudioText('حُفِظَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">حُفِظَ</div><div class="word-parts">حُ + فِ + ظَ</div><div class="word-fr">Hou-fi-zha (Préservé)</div></div>
+      <!-- Ligne 5 -->
+      <div class="word-cell" onclick="playAudioText('قُتِلَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">قُتِلَ</div><div class="word-parts">قُ + تِ + لَ</div><div class="word-fr">Qou-ti-la (A été tué)</div></div>
+      <div class="word-cell" onclick="playAudioText('غُفِرَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">غُفِرَ</div><div class="word-parts">غُ + فِ + رَ</div><div class="word-fr">Ghou-fi-ra (Pardonné)</div></div>
+      <div class="word-cell" onclick="playAudioText('خُلِقَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">خُلِقَ</div><div class="word-parts">خُ + لِ + قَ</div><div class="word-fr">Khou-li-qa (Créé)</div></div>
+      <div class="word-cell" onclick="playAudioText('رُزِقَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">رُزِقَ</div><div class="word-parts">رُ + زِ + قَ</div><div class="word-fr">Rou-zi-qa (Pourvu)</div></div>
+      <!-- Ligne 6 -->
+      <div class="word-cell" onclick="playAudioText('نُشِرَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">نُشِرَ</div><div class="word-parts">نُ + شِ + رَ</div><div class="word-fr">Nou-chi-ra (Publié)</div></div>
+      <div class="word-cell" onclick="playAudioText('فُتِحَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">فُتِحَ</div><div class="word-parts">فُ + تِ + حَ</div><div class="word-fr">Fou-ti-ha (Ouvert)</div></div>
+      <div class="word-cell" onclick="playAudioText('حُمِدَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">حُمِدَ</div><div class="word-parts">حُ + مِ + دَ</div><div class="word-fr">Hou-mi-da (A été loué)</div></div>
+      <div class="word-cell" onclick="playAudioText('عُلِمَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">عُلِمَ</div><div class="word-parts">عُ + لِ + مَ</div><div class="word-fr">'Ou-li-ma (A été su)</div></div>
+    </div>
+
+    <div>
+      <div class="homework-box">
+        <span>🎙️ <b>Enregistrement :</b> Bien faire entendre le souffle pur de ه (dans ذُهِـلَ et فُهِـمَ).</span>
+        <span>📁 Déposer l'audio dans <i>3. Audios</i></span>
+      </div>
+      <div class="footer-bar">
+        <span>☁️ Espace Drive Écolier</span>
+        <div class="footer-actions">
+          <a href="https://drive.google.com/file/d/1npA4voqoZrkwq41ebQouPmWJ4_sVw0Is/view?usp=drive_link" target="_blank" class="btn-footer">📄 Fiche Complète</a>
+          <a href="https://drive.google.com/drive/folders/1qRy1tykxToM94UQPvGXDc1Ub4il6IQqD?usp=drive_link" target="_blank" class="btn-footer">📷 2. Photos</a>
+          <a href="https://drive.google.com/drive/folders/1cQT0e1n81IPTUGHvInQFnZZ8BOkzgL0i?usp=drive_link" target="_blank" class="btn-footer">🎙️ 3. Audios</a>
+        </div>
+      </div>
+      <div class="page-footer-note">★ Audio interactif au clic (MP3 + Synthèse vocale de secours) • Page 2 / 2</div>
+    </div>
+  </div>
+
+  <!-- Script Audio Universel & Garanti -->
+  <script>
+    function playAudioText(arabicText, element) {
+      if (element) {
+        element.classList.add('playing');
+        setTimeout(() => element.classList.remove('playing'), 800);
+      }
+
+      // 1. Tentative avec flux audio direct MP3 haute qualité
+      const encoded = encodeURIComponent(arabicText);
+      const audioUrl = 'https://translate.google.com/translate_tts?ie=UTF-8&tl=ar&client=tw-ob&q=' + encoded;
+      const audio = new Audio(audioUrl);
+
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // 2. Repli immédiat et automatique sur SpeechSynthesis
+          speakFallback(arabicText);
+        });
+      } else {
+        speakFallback(arabicText);
+      }
+    }
+
+    function speakFallback(arabicText) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(arabicText);
+        utterance.lang = 'ar-SA';
+        utterance.rate = 0.85;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
+  </script>
+</body>
+</html>
