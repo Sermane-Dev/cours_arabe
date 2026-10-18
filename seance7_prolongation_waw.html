@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Synthèse Express — Séance 7 (Wâw Madiyya)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap');
+
+    @page { size: A4 portrait; margin: 10mm; }
+    * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; color: #0f172a; display: flex; flex-direction: column; align-items: center; padding: 20px 0; }
+    .page { width: 210mm; min-height: 297mm; background: #ffffff; padding: 14mm 16mm; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; justify-content: space-between; page-break-after: always; position: relative; }
+    .header-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #86198f; padding-bottom: 8px; margin-bottom: 10px; }
+    .badge-session { background: #fdf4ff; color: #86198f; font-size: 11.5px; font-weight: 700; padding: 3px 10px; border-radius: 9999px; display: inline-block; margin-bottom: 4px; }
+    .page-title { font-size: 20px; font-weight: 800; color: #0f172a; letter-spacing: -0.3px; }
+    .header-actions { display: flex; gap: 8px; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none; transition: all 0.15s ease; }
+    .btn-outline { background: #ffffff; color: #334155; border: 1px solid #cbd5e1; }
+    .btn-primary { background: #86198f; color: #ffffff; border: 1px solid #86198f; }
+    .guide-strip { background: #fdf4ff; border-left: 4px solid #86198f; padding: 7px 12px; font-size: 12px; color: #334155; border-radius: 0 8px 8px 0; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+    .method-strip { background: #fdf2f8; border: 1.5px solid #fbcfe8; border-radius: 8px; padding: 7px 12px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .method-title { font-size: 12px; font-weight: 800; color: #9d174d; text-transform: uppercase; }
+    .method-steps { display: flex; align-items: center; gap: 10px; font-size: 12px; color: #831843; }
+    .step-pill { background: #ffffff; border: 1px solid #f472b6; padding: 2px 7px; border-radius: 6px; font-weight: 600; }
+    .grid-alphabet { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(7, 1fr); gap: 7px; direction: rtl; flex: 1; margin-bottom: 10px; }
+    .letter-box { border: 1.5px solid #cbd5e1; border-radius: 9px; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 3px 6px; text-align: center; cursor: pointer; transition: all 0.15s ease; }
+    .letter-box:hover { border-color: #86198f; background: #fdf4ff; transform: translateY(-1px); }
+    .letter-box.highlight { background: #fef2f2; border-color: #fca5a5; }
+    .ar-variants { font-family: 'Amiri', serif; font-size: 24px; color: #0f172a; line-height: 1.15; direction: rtl; }
+    .letter-name { font-size: 10px; font-weight: 600; color: #64748b; margin-top: 2px; direction: ltr; }
+    .words-board { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(6, 1fr); gap: 8px; direction: rtl; flex: 1; margin-bottom: 10px; }
+    .word-cell { border: 1.5px solid #e2e8f0; border-radius: 9px; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 6px 4px; text-align: center; cursor: pointer; position: relative; transition: all 0.15s ease; user-select: none; }
+    .word-cell:hover { border-color: #86198f; background: #fdf4ff; transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(134, 25, 143, 0.15); }
+    .word-cell:active, .word-cell.playing, .letter-box.playing { border-color: #16a34a !important; background: #ecfdf5 !important; transform: scale(0.98); }
+    .audio-tag { position: absolute; top: 4px; left: 6px; font-size: 10px; color: #94a3b8; }
+    .word-cell:hover .audio-tag { color: #86198f; }
+    .word-ar { font-family: 'Amiri', serif; font-size: 31px; color: #0f172a; line-height: 1.1; margin-bottom: 2px; }
+    .word-parts { font-family: 'Amiri', serif; font-size: 15px; color: #86198f; direction: rtl; }
+    .word-fr { font-size: 9.5px; color: #64748b; direction: ltr; font-weight: 500; }
+    .homework-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 7px 12px; margin-bottom: 8px; font-size: 11px; color: #334155; display: flex; justify-content: space-between; align-items: center; }
+    .footer-bar { background: #0f172a; color: #f8fafc; padding: 9px 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; }
+    .footer-actions { display: flex; gap: 6px; }
+    .btn-footer { background: #1e293b; color: #f1f5f9; border: 1px solid #334155; padding: 4px 8px; border-radius: 6px; font-size: 10.5px; text-decoration: none; }
+    .btn-footer:hover { background: #334155; }
+    .page-footer-note { text-align: center; font-size: 10px; color: #94a3b8; padding-top: 4px; }
+    @media print { body { background-color: transparent; padding: 0; } .page { margin: 0; box-shadow: none; width: 100%; min-height: 100vh; } }
+  </style>
+</head>
+<body>
+
+  <!-- PAGE 1 : TABLEAU WAW MADDIYYA -->
+  <div class="page">
+    <div>
+      <div class="header-bar">
+        <div>
+          <span class="badge-session">⚡ Synthèse Express • Séance 7</span>
+          <h1 class="page-title">Tableau Repère : Le Wâw de Prolongation (الْوَاوُ الْمَدِّيَّة)</h1>
+        </div>
+        <div class="header-actions">
+          <a href="https://drive.google.com/drive/folders/1b0MfjPlFVzM5XG2ou5QduwwbKc24lFYU?usp=sharing" target="_blank" class="btn btn-outline">📁 Drive</a>
+          <a href="https://drive.google.com/file/d/1HJGO-1jyIwEm0ypiuWtleRpCevzdbG1j/view?usp=sharing" target="_blank" class="btn btn-primary">📄 Fiche Détaillée</a>
+        </div>
+      </div>
+
+      <div class="guide-strip">
+        <span>💡 <b>Règles :</b> 2 temps ronds (ـُ + و = ـُو). La Hamza sur Wâw prolongée s'écrit (ءُ + و = أُو / ـؤُو). Pas de Soukoûn complexe dans cette fiche.</span>
+        <span style="font-size: 11px; color: #64748b;">🔊 Cliquez pour écouter</span>
+      </div>
+    </div>
+
+    <div class="grid-alphabet">
+      <!-- Ligne 1 -->
+      <div class="letter-box highlight" onclick="speakArabic('أُو', this)"><div class="ar-variants">أُو - ـؤُو</div><div class="letter-name">Hamza sur Wâw ('Oû)</div></div>
+      <div class="letter-box" onclick="speakArabic('بُو', this)"><div class="ar-variants">بُو - ـبُو</div><div class="letter-name">Bâ (Boû)</div></div>
+      <div class="letter-box" onclick="speakArabic('تُو', this)"><div class="ar-variants">تُو - ـتُو</div><div class="letter-name">Tâ (Toû)</div></div>
+      <div class="letter-box" onclick="speakArabic('ثُو', this)"><div class="ar-variants">ثُو - ـثُو</div><div class="letter-name">Thâ (Thoû)</div></div>
+      <!-- Ligne 2 -->
+      <div class="letter-box" onclick="speakArabic('جُو', this)"><div class="ar-variants">جُو - ـجُو</div><div class="letter-name">Jîm (Joû)</div></div>
+      <div class="letter-box" onclick="speakArabic('حُو', this)"><div class="ar-variants">حُو - ـحُو</div><div class="letter-name">Hâ (Hoû)</div></div>
+      <div class="letter-box" onclick="speakArabic('خُو', this)"><div class="ar-variants">خُو - ـخُو</div><div class="letter-name">Khâ (Khoû)</div></div>
+      <div class="letter-box" onclick="speakArabic('دُو', this)"><div class="ar-variants">دُو - ـدُو</div><div class="letter-name">Dâl (Doû)</div></div>
+      <!-- Ligne 3 -->
+      <div class="letter-box" onclick="speakArabic('ذُو', this)"><div class="ar-variants">ذُو - ـذُو</div><div class="letter-name">Dhâl (Dhoû)</div></div>
+      <div class="letter-box" onclick="speakArabic('رُو', this)"><div class="ar-variants">رُو - ـرُو</div><div class="letter-name">Râ (Roû)</div></div>
+      <div class="letter-box" onclick="speakArabic('زُو', this)"><div class="ar-variants">زُو - ـزُو</div><div class="letter-name">Zây (Zoû)</div></div>
+      <div class="letter-box" onclick="speakArabic('سُو', this)"><div class="ar-variants">سُو - ـسُو</div><div class="letter-name">Sîn (Soû)</div></div>
+      <!-- Ligne 4 -->
+      <div class="letter-box" onclick="speakArabic('شُو', this)"><div class="ar-variants">شُو - ـشُو</div><div class="letter-name">Shîn (Shoû)</div></div>
+      <div class="letter-box" onclick="speakArabic('صُو', this)"><div class="ar-variants">صُو - ـصُو</div><div class="letter-name">Sâd (Soû)</div></div>
+      <div class="letter-box" onclick="speakArabic('ضُو', this)"><div class="ar-variants">ضُو - ـضُو</div><div class="letter-name">Dâd (Doû)</div></div>
+      <div class="letter-box" onclick="speakArabic('طُو', this)"><div class="ar-variants">طُو - ـطُو</div><div class="letter-name">Tâ' (Toû)</div></div>
+      <!-- Ligne 5 -->
+      <div class="letter-box" onclick="speakArabic('ظُو', this)"><div class="ar-variants">ظُو - ـظُو</div><div class="letter-name">Zhâ' (Zhoû)</div></div>
+      <div class="letter-box highlight" onclick="speakArabic('عُو', this)"><div class="ar-variants">عُو - ـعُو</div><div class="letter-name">'Ayn ('Oû - Gorge)</div></div>
+      <div class="letter-box highlight" onclick="speakArabic('غُو', this)"><div class="ar-variants">غُو - ـغُو</div><div class="letter-name">Ghayn (Ghoû - Palais)</div></div>
+      <div class="letter-box" onclick="speakArabic('فُو', this)"><div class="ar-variants">فُو - ـفُو</div><div class="letter-name">Fâ (Foû)</div></div>
+      <!-- Ligne 6 -->
+      <div class="letter-box highlight" onclick="speakArabic('قُو', this)"><div class="ar-variants">قُو - ـقُو</div><div class="letter-name">Qâf (Qoû - Luette)</div></div>
+      <div class="letter-box" onclick="speakArabic('كُو', this)"><div class="ar-variants">كُو - ـكُو</div><div class="letter-name">Kâf (Koû)</div></div>
+      <div class="letter-box" onclick="speakArabic('لُو', this)"><div class="ar-variants">لُو - ـلُو</div><div class="letter-name">Lâm (Loû)</div></div>
+      <div class="letter-box" onclick="speakArabic('مُو', this)"><div class="ar-variants">مُو - ـمُو</div><div class="letter-name">Mîm (Moû)</div></div>
+      <!-- Ligne 7 -->
+      <div class="letter-box" onclick="speakArabic('نُو', this)"><div class="ar-variants">نُو - ـنُو</div><div class="letter-name">Nûn (Noû)</div></div>
+      <div class="letter-box highlight" onclick="speakArabic('هُو', this)"><div class="ar-variants">هُو - ـهُو</div><div class="letter-name">Hâ' (Hoû - Souffle)</div></div>
+      <div class="letter-box" onclick="speakArabic('وُو', this)"><div class="ar-variants">وُو - ـوُو</div><div class="letter-name">Wâw (Woû)</div></div>
+      <div class="letter-box" onclick="speakArabic('يُو', this)"><div class="ar-variants">يُو - ـيُو</div><div class="letter-name">Yâ (Yoû)</div></div>
+    </div>
+
+    <div>
+      <div class="footer-bar">
+        <span>⚠️ <b>Nuance Hamza :</b> Dans <i>يَؤُودُ</i> ou <i>يَبُوءُ</i>, la Hamza avec Damma peut glisser légèrement vers un son Wâw.</span>
+        <span>Page 1 / 2</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 2 : 24 VERBES / MOTS AVEC WAW MADDIYYA (SANS SOUKOUN COMPLEXE) -->
+  <div class="page">
+    <div>
+      <div class="header-bar">
+        <div>
+          <span class="badge-session" style="background:#fdf4ff; color:#86198f;">⚡ Séance 7 • Pratique de Lecture</span>
+          <h1 class="page-title">Lecture Continue : Mots avec Wâw Madiyya (و)</h1>
+        </div>
+        <div class="header-actions">
+          <a href="https://drive.google.com/file/d/1HJGO-1jyIwEm0ypiuWtleRpCevzdbG1j/view?usp=sharing" target="_blank" class="btn btn-primary" style="background:#86198f; border-color:#86198f;">📄 Fiche Slides PDF</a>
+        </div>
+      </div>
+
+      <div class="method-strip">
+        <div class="method-title">Rythme & Mesure :</div>
+        <div class="method-steps">
+          <span class="step-pill">1. Damma ronde</span>
+          <span>➔</span>
+          <span class="step-pill">2. Prolongation 2 temps [ oû ]</span>
+          <span>➔</span>
+          <span class="step-pill">3. Sortie vocale propre sans fermer la glotte</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="words-board">
+      <!-- Ligne 1 (Mots vus du cours - 10 premiers sans Soukoûn) -->
+      <div class="word-cell" onclick="speakArabic('يَؤُودُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">يَؤُودُ</div><div class="word-parts">يَ + ءُ + و + دُ</div><div class="word-fr">Ya-'oû-dou (Il fatigue)</div></div>
+      <div class="word-cell" onclick="speakArabic('يَتُوبُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">يَتُوبُ</div><div class="word-parts">يَ + تُـ + و + بُ</div><div class="word-fr">Ya-toû-bou (Il se repent)</div></div>
+      <div class="word-cell" onclick="speakArabic('يُوقِدُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">يُوقِدُ</div><div class="word-parts">يُـ + و + قِ + دُ</div><div class="word-fr">Yoû-qi-dou (Il allume)</div></div>
+      <div class="word-cell" onclick="speakArabic('بُورِكَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">بُورِكَ</div><div class="word-parts">بُـ + و + رِ + كَ</div><div class="word-fr">Boû-ri-ka (Béni soit)</div></div>
+      <!-- Ligne 2 -->
+      <div class="word-cell" onclick="speakArabic('قُوبِلَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">قُوبِلَ</div><div class="word-parts">قُـ + و + بِ + لَ</div><div class="word-fr">Qoû-bi-la (A été accueilli)</div></div>
+      <div class="word-cell" onclick="speakArabic('فُوجِئَ', this)"><span class="audio-tag">🔊</span><div class="word-ar">فُوجِئَ</div><div class="word-parts">فُـ + و + جِ + ئَ</div><div class="word-fr">Foû-ji-'a (A été surpris)</div></div>
+      <div class="word-cell" onclick="speakArabic('يَحُولُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">يَحُولُ</div><div class="word-parts">يَ + حُـ + و + لُ</div><div class="word-fr">Ya-hoû-lou (Il s'interpose)</div></div>
+      <div class="word-cell" onclick="speakArabic('يَجُولُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">يَجُولُ</div><div class="word-parts">يَ + جُـ + و + لُ</div><div class="word-fr">Ya-joû-lou (Il parcourt)</div></div>
+      <!-- Ligne 3 -->
+      <div class="word-cell" onclick="speakArabic('يَفُوحُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">يَفُوحُ</div><div class="word-parts">يَ + فُـ + و + حُ</div><div class="word-fr">Ya-foû-hou (Il embaume)</div></div>
+      <div class="word-cell" onclick="speakArabic('يَكُونُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">يَكُونُ</div><div class="word-parts">يَ + كُـ + و + نُ</div><div class="word-fr">Ya-koû-nou (Il est / sera)</div></div>
+      <div class="word-cell" onclick="speakArabic('يَزُورُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">يَزُورُ</div><div class="word-parts">يَ + زُ + و + رُ</div><div class="word-fr">Ya-zoû-rou (Il visite)</div></div>
+      <div class="word-cell" onclick="speakArabic('يَمُوجُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">يَمُوجُ</div><div class="word-parts">يَ + مُـ + و + جُ</div><div class="word-fr">Ya-moû-jou (Il ondule)</div></div>
+      <!-- Ligne 4 (Suite sélectionnée sans Soukoûn) -->
+      <div class="word-cell" onclick="speakArabic('تَبُوءُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">تَبُوءُ</div><div class="word-parts">تَ + بُـ + و + ءُ</div><div class="word-fr">Ta-boû-'ou (Elle encourt)</div></div>
+      <div class="word-cell" onclick="speakArabic('يَقُومُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">يَقُومُ</div><div class="word-parts">يَ + قُـ + و + مُ</div><div class="word-fr">Ya-qoû-mou (Il se dresse)</div></div>
+      <div class="word-cell" onclick="speakArabic('يَصُومُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">يَصُومُ</div><div class="word-parts">يَ + صُـ + و + مُ</div><div class="word-fr">Ya-soû-mou (Il jeûne)</div></div>
+      <div class="word-cell" onclick="speakArabic('يَقُولُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">يَقُولُ</div><div class="word-parts">يَ + قُـ + و + لُ</div><div class="word-fr">Ya-qoû-lou (Il dit)</div></div>
+      <!-- Ligne 5 -->
+      <div class="word-cell" onclick="speakArabic('يَنُوحُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">يَنُوحُ</div><div class="word-parts">يَ + نُـ + و + حُ</div><div class="word-fr">Ya-noû-hou (Il se lamente)</div></div>
+      <div class="word-cell" onclick="speakArabic('يَسُوقُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">يَسُوقُ</div><div class="word-parts">يَ + سُـ + و + قُ</div><div class="word-fr">Ya-soû-qou (Il conduit)</div></div>
+      <div class="word-cell" onclick="speakArabic('يَذُوقُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">يَذُوقُ</div><div class="word-parts">يَ + ذُ + و + قُ</div><div class="word-fr">Ya-dhoû-qou (Il goûte)</div></div>
+      <div class="word-cell" onclick="speakArabic('يَعُودُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">يَعُودُ</div><div class="word-parts">يَ + عُـ + و + دُ</div><div class="word-fr">Ya-'oû-dou (Il revient)</div></div>
+      <!-- Ligne 6 -->
+      <div class="word-cell" onclick="speakArabic('يَفُوزُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">يَفُوزُ</div><div class="word-parts">يَ + فُـ + و + زُ</div><div class="word-fr">Ya-foû-zou (Il triomphe)</div></div>
+      <div class="word-cell" onclick="speakArabic('يَمُوتُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">يَمُوتُ</div><div class="word-parts">يَ + مُـ + و + تُ</div><div class="word-fr">Ya-moû-tou (Il meurt)</div></div>
+      <div class="word-cell" onclick="speakArabic('تَجُودُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">تَجُودُ</div><div class="word-parts">تَ + جُـ + و + دُ</div><div class="word-fr">Ta-joû-dou (Elle donne généreusement)</div></div>
+      <div class="word-cell" onclick="speakArabic('يَطُوفُ', this)"><span class="audio-tag">🔊</span><div class="word-ar">يَطُوفُ</div><div class="word-parts">يَ + طُـ + و + فُ</div><div class="word-fr">Ya-toû-fou (Il tourne autour)</div></div>
+    </div>
+
+    <div>
+      <div class="homework-box">
+        <span>🎙️ <b>Enregistrement :</b> Bien faire entendre le souffle pur de la lettre <b>هـ</b> et projeter les lèvres sur <b>و</b>.</span>
+        <span>📁 Déposer l'audio dans <i>3. Audios</i></span>
+      </div>
+      <div class="footer-bar">
+        <span>☁️ Espace Drive Écolier</span>
+        <div class="footer-actions">
+          <a href="https://drive.google.com/file/d/1HJGO-1jyIwEm0ypiuWtleRpCevzdbG1j/view?usp=sharing" target="_blank" class="btn-footer">📄 Fiche Complète</a>
+          <a href="https://drive.google.com/drive/folders/1qRy1tykxToM94UQPvGXDc1Ub4il6IQqD?usp=drive_link" target="_blank" class="btn-footer">📷 2. Photos</a>
+          <a href="https://drive.google.com/drive/folders/1cQT0e1n81IPTUGHvInQFnZZ8BOkzgL0i?usp=drive_link" target="_blank" class="btn-footer">🎙️ 3. Audios</a>
+        </div>
+      </div>
+      <div class="page-footer-note">★ Audio interactif natif au clic • Page 2 / 2</div>
+    </div>
+  </div>
+
+  <script>
+    function speakArabic(text, element) {
+      if (!('speechSynthesis' in window)) {
+        alert("La synthèse vocale n'est pas supportée sur ce navigateur.");
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'ar-SA';
+      utterance.rate = 0.85;
+
+      if (element) {
+        element.classList.add('playing');
+        utterance.onend = function() { element.classList.remove('playing'); };
+        utterance.onerror = function() { element.classList.remove('playing'); };
+      }
+      window.speechSynthesis.speak(utterance);
+    }
+  </script>
+</body>
+</html>
