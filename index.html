@@ -176,10 +176,10 @@
 
     .session-arabic-badge {
       font-family: 'Amiri', serif;
-      font-size: 24px;
+      font-size: 22px;
       color: #065f46;
       background: #ecfdf5;
-      padding: 4px 14px;
+      padding: 3px 12px;
       border-radius: 8px;
       border: 1px solid #a7f3d0;
       direction: rtl;
@@ -194,28 +194,23 @@
     }
 
     .btn-open {
-      background: #0284c7;
       color: #ffffff;
-      padding: 8px 14px;
+      padding: 7px 12px;
       border-radius: 8px;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
       text-decoration: none;
       white-space: nowrap;
-      transition: background 0.15s ease;
+      transition: opacity 0.15s ease;
     }
 
     .btn-open:hover {
-      background: #0369a1;
+      opacity: 0.9;
     }
 
-    .btn-purple {
-      background: #86198f;
-    }
-
-    .btn-purple:hover {
-      background: #701a75;
-    }
+    .btn-blue { background: #0284c7; }
+    .btn-emerald { background: #059669; }
+    .btn-purple { background: #86198f; }
 
     .footer-note {
       text-align: center;
@@ -243,8 +238,8 @@
         <a href="https://drive.google.com/drive/folders/1b0MfjPlFVzM5XG2ou5QduwwbKc24lFYU?usp=sharing" target="_blank" class="btn-drive">
           📁 Dossier Général
         </a>
-        <a href="https://drive.google.com/drive/folders/1rh-DDwCnif9QLrXGqhC94tC_zAPjWBNN?usp=sharing" target="_blank" class="btn-drive">
-          📄 Fiches Révision
+        <a href="https://drive.google.com/file/d/1HJGO-1jyIwEm0ypiuWtleRpCevzdbG1j/view?usp=sharing" target="_blank" class="btn-drive">
+          📄 Fiche S7 (PDF)
         </a>
         <a href="https://drive.google.com/drive/folders/1qRy1tykxToM94UQPvGXDc1Ub4il6IQqD?usp=drive_link" target="_blank" class="btn-drive">
           📷 2. Photos écriture
@@ -259,20 +254,34 @@
     <div class="section-title" style="margin-top: 6px;">📚 Programme & Ateliers Interactifs</div>
     <div class="sessions-list">
 
-      <!-- Séance 6 (Actuelle / Deux Ateliers Interactifs) -->
+      <!-- Séance 7 (En cours - 3 Ateliers Interactifs) -->
       <div class="session-card active">
         <div class="session-info">
-          <span class="session-tag">⚡ Séance 6 • En cours</span>
-          <div class="session-name">Voyelles Brèves : Kasra (ـِ) & Damma (ـُ)</div>
-          <div class="session-desc">Tableaux repères complets et lecture de 48 verbes vocalisés avec audio.</div>
+          <span class="session-tag">⚡ Séance 7 • En cours</span>
+          <div class="session-name">Les Lettres de Prolongation (حُرُوفُ الْمَدّ)</div>
+          <div class="session-desc">Allongement à 2 temps avec Alif (ا), Yâ (ي) et Wâw (و), Alif Maddah (آ) et Maqsoura (ى).</div>
         </div>
         <div class="actions-group">
-          <a href="seance6_kasra.html" class="btn-open">🔹 Kasra (ـِ)</a>
-          <a href="seance6_damma.html" class="btn-open btn-purple">🟣 Damma (ـُ)</a>
+          <a href="seance7_alif.html" class="btn-open btn-blue">🔹 Alif (ا)</a>
+          <a href="seance7_yaa.html" class="btn-open btn-emerald">🟢 Yâ (ي)</a>
+          <a href="seance7_waw.html" class="btn-open btn-purple">🟣 Wâw (و)</a>
         </div>
       </div>
 
-      <!-- Séance 5 -->
+      <!-- Séance 6 (Terminée) -->
+      <div class="session-card completed">
+        <div class="session-info">
+          <span class="session-tag">✅ Séance 6 • Terminée</span>
+          <div class="session-name">Voyelles Brèves : Kasra (ـِ) & Damma (ـُ)</div>
+          <div class="session-desc">Tableaux repères complets et 48 verbes vocalisés avec audio au clic.</div>
+        </div>
+        <div class="actions-group">
+          <a href="seance6_kasra.html" class="btn-drive" style="font-size: 12px; padding: 6px 10px;">Kasra (ـِ)</a>
+          <a href="seance6_Damma.html" class="btn-drive" style="font-size: 12px; padding: 6px 10px;">Damma (ـُ)</a>
+        </div>
+      </div>
+
+      <!-- Séance 5 (Terminée) -->
       <div class="session-card completed">
         <div class="session-info">
           <span class="session-tag">✅ Séance 5 • Terminée</span>
@@ -280,12 +289,12 @@
           <div class="session-desc">Atelier audio interactif, déchiffrage continu et mots bonus.</div>
         </div>
         <div class="actions-group">
-          <div class="session-arabic-badge" style="font-size: 20px; padding: 2px 10px;">دَرَسَ • أَكَلَ</div>
-          <a href="seance5.html" class="btn-drive" style="font-size: 12px; padding: 6px 12px;">Ouvrir l'atelier</a>
+          <div class="session-arabic-badge">دَرَسَ • أَكَلَ</div>
+          <a href="seance5.html" class="btn-drive" style="font-size: 12px; padding: 6px 12px;">Ouvrir</a>
         </div>
       </div>
 
-      <!-- Séance 4 -->
+      <!-- Séance 4 (Terminée) -->
       <div class="session-card completed">
         <div class="session-info">
           <span class="session-tag">✅ Séance 4 • Terminée</span>
@@ -297,7 +306,7 @@
         </a>
       </div>
 
-      <!-- Séance 3 -->
+      <!-- Séance 3 (Terminée) -->
       <div class="session-card completed">
         <div class="session-info">
           <span class="session-tag">✅ Séance 3 • Terminée</span>
@@ -309,12 +318,12 @@
         </a>
       </div>
 
-      <!-- Séance 7 (À venir) -->
+      <!-- Séance 8 (À venir) -->
       <div class="session-card locked">
         <div class="session-info">
-          <span class="session-tag" style="color: #94a3b8;">🔒 Séance 7 • Dimanche prochain</span>
-          <div class="session-name">Les Lettres de Prolongation (Voyelles Longues)</div>
-          <div class="session-desc">Étude des voyelles longues : Alif (ا), Wâw (و), Yâ (ي) et rythme de lecture.</div>
+          <span class="session-tag" style="color: #94a3b8;">🔒 Séance 8 • Dimanche prochain</span>
+          <div class="session-name">Le Soukoûn (السُّكُون — Absence de voyelle)</div>
+          <div class="session-desc">Arrêt net sur consonne, mécanisme d'appui phonétique et lecture de syllabes fermées.</div>
         </div>
       </div>
 
