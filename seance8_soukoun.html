@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Synthèse Express — Séance 8 (Soukoûn)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap');
+
+    @page { size: A4 portrait; margin: 10mm; }
+    * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; color: #0f172a; display: flex; flex-direction: column; align-items: center; padding: 20px 0; }
+    .page { width: 210mm; min-height: 297mm; background: #ffffff; padding: 14mm 16mm; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; justify-content: space-between; page-break-after: always; position: relative; }
+    .header-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0284c7; padding-bottom: 8px; margin-bottom: 10px; gap: 10px; }
+    .badge-session { background: #e0f2fe; color: #0369a1; font-size: 11.5px; font-weight: 700; padding: 3px 10px; border-radius: 9999px; display: inline-block; margin-bottom: 4px; }
+    .page-title { font-size: 20px; font-weight: 800; color: #0f172a; letter-spacing: -0.3px; }
+    .header-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none; transition: all 0.15s ease; }
+    .btn-outline { background: #ffffff; color: #334155; border: 1px solid #cbd5e1; }
+    .btn-primary { background: #0284c7; color: #ffffff; border: 1px solid #0284c7; }
+    .guide-strip { background: #f8fafc; border-left: 4px solid #0284c7; padding: 7px 12px; font-size: 12px; color: #334155; border-radius: 0 8px 8px 0; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .guide-strip .ar-inline { font-family: 'Amiri', serif; font-size: 16px; }
+    .method-strip { background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 8px; padding: 7px 12px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .method-title { font-size: 12px; font-weight: 800; color: #166534; text-transform: uppercase; }
+    .method-steps { display: flex; align-items: center; gap: 10px; font-size: 12px; color: #14532d; }
+    .step-pill { background: #ffffff; border: 1px solid #86efac; padding: 2px 7px; border-radius: 6px; font-weight: 600; }
+
+    /* Légende des cas particuliers */
+    .legend { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; font-size: 10.5px; }
+    .chip { padding: 2px 9px; border-radius: 9999px; border: 1px solid; font-weight: 600; }
+    .chip.qalqala { background: #fff7ed; border-color: #fdba74; color: #9a3412; }
+    .chip.hams    { background: #faf5ff; border-color: #d8b4fe; color: #6b21a8; }
+    .chip.noun    { background: #f0fdfa; border-color: #5eead4; color: #115e59; }
+    .chip.forte   { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
+    .chip.lin     { background: #f8fafc; border-color: #94a3b8; color: #334155; border-style: dashed; }
+    .chip.double  { background: #f1f5f9; border-color: #475569; color: #0f172a; }
+
+    /* Page 1 : lettres */
+    .grid-alphabet { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(7, 1fr); gap: 7px; direction: rtl; flex: 1; margin-bottom: 10px; }
+    .letter-box { border: 1.5px solid #cbd5e1; border-radius: 9px; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 3px 6px; text-align: center; cursor: pointer; transition: all 0.15s ease; }
+    .letter-box:hover { border-color: #0284c7; background: #f0f9ff; transform: translateY(-1px); }
+    .letter-box.qalqala { background: #fff7ed; border-color: #fdba74; }
+    .letter-box.hams    { background: #faf5ff; border-color: #d8b4fe; }
+    .letter-box.noun    { background: #f0fdfa; border-color: #5eead4; }
+    .letter-box.forte   { background: #fef2f2; border-color: #fca5a5; }
+    .letter-box.lin     { background: #f8fafc; border-color: #94a3b8; border-style: dashed; }
+    .letter-read { font-family: 'Amiri', serif; font-size: 40px; color: #0284c7; direction: rtl; line-height: 1.3; }
+    .letter-name { font-size: 10.5px; font-weight: 600; color: #64748b; margin-top: 4px; direction: ltr; }
+
+    /* Pages 2 et 3 : mots */
+    .words-board { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(6, 1fr); gap: 8px; direction: rtl; flex: 1; margin-bottom: 10px; }
+    .words-board.defi { grid-template-rows: repeat(4, 1fr); }
+    .word-cell { border: 1.5px solid #e2e8f0; border-radius: 9px; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 6px 4px; text-align: center; cursor: pointer; position: relative; transition: all 0.15s ease; user-select: none; }
+    .word-cell:hover { border-color: #0284c7; background: #f0f9ff; transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.15); }
+    .word-cell.qalqala { border-top: 4px solid #f97316; }
+    .word-cell.hams    { border-top: 4px solid #a855f7; }
+    .word-cell.noun    { border-top: 4px solid #14b8a6; }
+    .word-cell.forte   { border-top: 4px solid #ef4444; }
+    .word-cell.double  { border-top: 4px solid #0f172a; }
+    .word-cell:active, .word-cell.playing, .letter-box.playing { border-color: #16a34a !important; background: #ecfdf5 !important; transform: scale(0.98); }
+    .audio-tag { position: absolute; top: 4px; left: 6px; font-size: 10px; color: #94a3b8; }
+    .src-tag { position: absolute; top: 4px; right: 6px; font-size: 9px; font-weight: 700; color: #7c3aed; background: #f5f3ff; padding: 0 5px; border-radius: 4px; direction: ltr; }
+    .word-cell:hover .audio-tag { color: #0284c7; }
+    .word-ar { font-family: 'Amiri', serif; font-size: 31px; color: #0f172a; line-height: 1.1; margin-bottom: 2px; }
+    .word-parts { font-family: 'Amiri', serif; font-size: 15px; color: #0284c7; direction: rtl; }
+    .word-fr { font-size: 9.5px; color: #64748b; direction: ltr; font-weight: 500; }
+
+    .homework-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 7px 12px; margin-bottom: 8px; font-size: 11px; color: #334155; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .homework-box .ar-inline { font-family: 'Amiri', serif; font-size: 15px; }
+    .footer-bar { background: #0f172a; color: #f8fafc; padding: 9px 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; gap: 10px; }
+    .footer-bar .ar-inline { font-family: 'Amiri', serif; font-size: 15px; }
+    .footer-actions { display: flex; gap: 6px; }
+    .btn-footer { background: #1e293b; color: #f1f5f9; border: 1px solid #334155; padding: 4px 8px; border-radius: 6px; font-size: 10.5px; text-decoration: none; white-space: nowrap; }
+    .btn-footer:hover { background: #334155; }
+    .page-footer-note { text-align: center; font-size: 10px; color: #94a3b8; padding-top: 4px; }
+
+    @media print {
+      body { background-color: transparent; padding: 0; }
+      .page { margin: 0; box-shadow: none; width: 100%; min-height: 100vh; }
+      #voice-status { display: none; }
+    }
+
+    /* Smartphone */
+    @media (max-width: 820px) {
+      body { padding: 0; }
+      .page { width: 100%; min-height: auto; padding: 16px 12px; margin-bottom: 10px; box-shadow: none; }
+      .header-bar, .guide-strip, .method-strip, .homework-box, .footer-bar { flex-wrap: wrap; }
+      .page-title { font-size: 17px; }
+      .method-steps, .footer-actions { flex-wrap: wrap; gap: 6px; }
+      .grid-alphabet { grid-template-columns: repeat(4, 1fr); grid-template-rows: none; }
+      .words-board, .words-board.defi { grid-template-columns: repeat(2, 1fr); grid-template-rows: none; }
+      .letter-box { padding: 8px 2px; }
+      .word-cell { padding: 14px 4px 8px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- PAGE 1 : LES 28 LETTRES AVEC SOUKOÛN -->
+  <div class="page">
+    <div>
+      <div class="header-bar">
+        <div>
+          <span class="badge-session">⚡ Synthèse Express • Séance 8</span>
+          <h1 class="page-title">Tableau Repère : Les Lettres avec le Soukoûn (السُّكُون)</h1>
+        </div>
+        <div class="header-actions">
+          <a href="https://drive.google.com/drive/folders/1b0MfjPlFVzM5XG2ou5QduwwbKc24lFYU?usp=sharing" target="_blank" class="btn btn-outline">📁 Drive</a>
+          <a href="https://drive.google.com/file/d/1MQihrWE_9lnz-L3P1D-q7dwDll1465dT/view?usp=drive_link" target="_blank" class="btn btn-primary">📄 Fiche Détaillée</a>
+        </div>
+      </div>
+
+      <div class="guide-strip">
+        <span>💡 <b>Règles :</b> Le Soukoûn (<span class="ar-inline">ـْ</span>) = pas de voyelle, arrêt net. Il ne commence jamais un mot : il s'appuie sur une lettre voyellée. Pour lire chaque lettre, on imagine <span class="ar-inline">بَ</span> devant.</span>
+        <span style="font-size: 11px; color: #64748b; white-space: nowrap;">🔊 Clique pour écouter</span>
+      </div>
+
+      <div class="legend">
+        <span class="chip qalqala">🟠 Qalqala : léger rebond (ق ط ب ج د)</span>
+        <span class="chip hams">🟣 Hams : petit souffle (ت ك)</span>
+        <span class="chip noun">🟢 Nûn : toucher léger, ne pas appuyer</span>
+        <span class="chip forte">🔴 Lettre forte : le بَ reste léger</span>
+        <span class="chip lin">◌ و / ي : son glissé « aw / ay »</span>
+      </div>
+    </div>
+
+    <div class="grid-alphabet" id="grid-lettres"></div>
+
+    <div>
+      <div class="footer-bar">
+        <span>⚠️ <b>Lettre forte au Soukoûn</b> (<span class="ar-inline">بَقْ ، بَصْ ، بَطْ</span>) : la lettre d'avant garde son son léger, on ne l'alourdit pas.</span>
+        <span style="white-space: nowrap;">Page 1 / 3</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 2 : 24 VERBES AVEC SOUKOÛN -->
+  <div class="page">
+    <div>
+      <div class="header-bar">
+        <div>
+          <span class="badge-session">⚡ Séance 8 • Pratique de Lecture</span>
+          <h1 class="page-title">Lecture Continue : Verbes avec Soukoûn</h1>
+        </div>
+        <div class="header-actions">
+          <a href="https://drive.google.com/file/d/1MQihrWE_9lnz-L3P1D-q7dwDll1465dT/view?usp=drive_link" target="_blank" class="btn btn-primary">📄 Fiche Slides PDF</a>
+        </div>
+      </div>
+
+      <div class="method-strip">
+        <div class="method-title">Rythme & Mesure :</div>
+        <div class="method-steps">
+          <span class="step-pill">1. Lettre voyellée</span>
+          <span>➔</span>
+          <span class="step-pill">2. + Lettre au Soukoûn = 1 seul bloc</span>
+          <span>➔</span>
+          <span class="step-pill">3. Arrêt net, sans voyelle ajoutée</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="words-board" id="mots-lecon"></div>
+
+    <div>
+      <div class="homework-box">
+        <span>🎙️ <b>Enregistrement :</b> Bien fermer le bloc <span class="ar-inline">أَسْ</span> dans <span class="ar-inline">أَسْلَمَ</span> : « as-la-ma », jamais « a-sa-la-ma ». <b>↩ S7</b> = mots gardés de la séance 7.</span>
+        <span style="white-space: nowrap;">📁 Déposer dans <i>3. Audios</i></span>
+      </div>
+      <div class="footer-bar">
+        <span>☁️ Espace Drive Écolier</span>
+        <div class="footer-actions">
+          <a href="https://drive.google.com/file/d/1MQihrWE_9lnz-L3P1D-q7dwDll1465dT/view?usp=drive_link" target="_blank" class="btn-footer">📄 Fiche Complète</a>
+          <a href="https://drive.google.com/drive/folders/1qRy1tykxToM94UQPvGXDc1Ub4il6IQqD?usp=drive_link" target="_blank" class="btn-footer">📷 2. Photos</a>
+          <a href="https://drive.google.com/drive/folders/1cQT0e1n81IPTUGHvInQFnZZ8BOkzgL0i?usp=drive_link" target="_blank" class="btn-footer">🎙️ 3. Audios</a>
+        </div>
+      </div>
+      <div class="page-footer-note">★ Audio interactif natif au clic • Page 2 / 3</div>
+    </div>
+  </div>
+
+  <!-- PAGE 3 : DÉFI — LES CAS PARTICULIERS -->
+  <div class="page">
+    <div>
+      <div class="header-bar">
+        <div>
+          <span class="badge-session">🏆 Séance 8 • Défi</span>
+          <h1 class="page-title">Défi : Les Cas Particuliers du Soukoûn</h1>
+        </div>
+        <div class="header-actions">
+          <a href="https://drive.google.com/file/d/1MQihrWE_9lnz-L3P1D-q7dwDll1465dT/view?usp=drive_link" target="_blank" class="btn btn-primary">📄 Fiche Slides PDF</a>
+        </div>
+      </div>
+
+      <div class="guide-strip">
+        <span>💡 <b>Repère couleur :</b> le bandeau en haut de chaque carte indique la règle à appliquer sur la lettre au Soukoûn.</span>
+        <span style="font-size: 11px; color: #64748b; white-space: nowrap;">🔊 Clique pour écouter</span>
+      </div>
+
+      <div class="legend">
+        <span class="chip qalqala">🟠 Qalqala (ق ط ب ج د)</span>
+        <span class="chip hams">🟣 Hams (ت ك)</span>
+        <span class="chip noun">🟢 Nûn léger</span>
+        <span class="chip forte">🔴 Lettre forte : l'avant reste léger</span>
+        <span class="chip double">⚫ Double Soukoûn</span>
+      </div>
+    </div>
+
+    <div class="words-board defi" id="mots-defi"></div>
+
+    <div>
+      <div class="homework-box">
+        <span>⚠️ <b>Ne pas confondre :</b> <span class="ar-inline">طْ</span> (Ṭâ emphatique → Qalqala) et <span class="ar-inline">تْ</span> (Tâ léger → Hams).</span>
+      </div>
+      <div class="footer-bar">
+        <span>➡️ <b>Prochaine leçon (Leçon 10) :</b> la Chadda (<span class="ar-inline">ـّ</span>) — lettre doublée.</span>
+        <div class="footer-actions">
+          <a href="https://drive.google.com/drive/folders/1qRy1tykxToM94UQPvGXDc1Ub4il6IQqD?usp=drive_link" target="_blank" class="btn-footer">📷 2. Photos</a>
+          <a href="https://drive.google.com/drive/folders/1cQT0e1n81IPTUGHvInQFnZZ8BOkzgL0i?usp=drive_link" target="_blank" class="btn-footer">🎙️ 3. Audios</a>
+        </div>
+      </div>
+      <div class="page-footer-note">★ Audio interactif natif au clic • Page 3 / 3</div>
+      <div id="voice-status" class="page-footer-note"></div>
+    </div>
+  </div>
+
+  <script>
+    /* ===================== CONTENU DE LA SÉANCE ===================== */
+    // [lettre au Soukoûn, lecture avec appui بَ, libellé, règle]
+    const LETTRES = [
+      ["أْ", "بَأْ", "Hamza • ba’", ""],
+      ["بْ", "بَبْ", "Bâ • bab", "qalqala"],
+      ["تْ", "بَتْ", "Tâ • bat", "hams"],
+      ["ثْ", "بَثْ", "Thâ • bath", ""],
+      ["جْ", "بَجْ", "Jîm • baj", "qalqala"],
+      ["حْ", "بَحْ", "Ḥâ • baḥ", ""],
+      ["خْ", "بَخْ", "Khâ • bakh", "forte"],
+      ["دْ", "بَدْ", "Dâl • bad", "qalqala"],
+      ["ذْ", "بَذْ", "Dhâl • badh", ""],
+      ["رْ", "بَرْ", "Râ • bar", ""],
+      ["زْ", "بَزْ", "Zây • baz", ""],
+      ["سْ", "بَسْ", "Sîn • bas", ""],
+      ["شْ", "بَشْ", "Shîn • bach", ""],
+      ["صْ", "بَصْ", "Ṣâd • baṣ", "forte"],
+      ["ضْ", "بَضْ", "Ḍâd • baḍ", "forte"],
+      ["طْ", "بَطْ", "Ṭâ • baṭ", "qalqala"],
+      ["ظْ", "بَظْ", "Ẓâ • baẓ", "forte"],
+      ["عْ", "بَعْ", "ʿAyn • baʿ", ""],
+      ["غْ", "بَغْ", "Ghayn • bagh", "forte"],
+      ["فْ", "بَفْ", "Fâ • baf", ""],
+      ["قْ", "بَقْ", "Qâf • baq", "qalqala"],
+      ["كْ", "بَكْ", "Kâf • bak", "hams"],
+      ["لْ", "بَلْ", "Lâm • bal", ""],
+      ["مْ", "بَمْ", "Mîm • bam", ""],
+      ["نْ", "بَنْ", "Nûn • ban", "noun"],
+      ["هْ", "بَهْ", "Hâ • bah", ""],
+      ["وْ", "بَوْ", "Wâw • baw", "lin"],
+      ["يْ", "بَيْ", "Yâ • bay", "lin"]
+    ];
+
+    // [mot, découpage en blocs, phonétique, traduction, règle, origine]
+    const MOTS_LECON = [
+      ["أَسْلَمَ", "أَسْـ + لَـ + مَ", "As-la-ma", "Se soumettre", "", ""],
+      ["بَسْمَلَ", "بَسْـ + مَـ + لَ", "Bas-ma-la", "Dire « Bismillah »", "", ""],
+      ["أَقْبَلَ", "أَقْـ + بَـ + لَ", "Aq-ba-la", "S'avancer", "", ""],
+      ["أَدْبَرَ", "أَدْ + بَـ + رَ", "Ad-ba-ra", "Tourner le dos", "", ""],
+      ["أَبْدَعَ", "أَبْـ + دَ + عَ", "Ab-da-ʿa", "Créer avec art", "", ""],
+      ["أَيْنَعَ", "أَيْـ + نَـ + عَ", "Ay-na-ʿa", "Mûrir (fruit)", "", ""],
+      ["يُتْبِعُ", "يُتْـ + بِـ + عُ", "Yout-bi-ʿou", "Il fait suivre", "", ""],
+      ["نُدْرِكُ", "نُدْ + رِ + كُ", "Noud-ri-kou", "Nous atteignons", "", ""],
+      ["يُمْسِي", "يُمْـ + سِـ + ي", "Youm-sî", "Il arrive au soir", "", ""],
+      ["تُصْبِحُ", "تُصْـ + بِـ + حُ", "Touṣ-bi-ḥou", "Tu arrives au matin", "", ""],
+      ["تَجْرِي", "تَجْـ + رِ + ي", "Taj-rî", "Elle court / coule", "", ""],
+      ["تُبْحِرُ", "تُبْـ + حِـ + رُ", "Toub-ḥi-rou", "Tu navigues", "", ""],
+      ["صُمْ", "صُـ + مْ", "Ṣoum", "Jeûne !", "", ""],
+      ["قُمْ", "قُـ + مْ", "Qoum", "Lève-toi !", "", ""],
+      ["دُمْ", "دُ + مْ", "Doum", "Persévère !", "", ""],
+      ["صِفْ", "صِـ + فْ", "Ṣif", "Décris !", "", ""],
+      ["عِشْ", "عِـ + شْ", "ʿIch", "Vis !", "", ""],
+      ["طِبْ", "طِـ + بْ", "Ṭib", "Sois agréable !", "", ""],
+      ["يَدْنُو", "يَدْ + نُـ + و", "Yad-noû", "Il s'approche", "", "S7"],
+      ["يَمْحُو", "يَمْـ + حُـ + و", "Yam-ḥoû", "Il efface", "", "S7"],
+      ["يَتْلُو", "يَتْـ + لُـ + و", "Yat-loû", "Il récite", "", "S7"],
+      ["يَهْجُو", "يَهْـ + جُـ + و", "Yah-joû", "Il fait une satire", "", "S7"],
+      ["يَرْجُو", "يَرْ + جُـ + و", "Yar-joû", "Il espère", "", ""],
+      ["يَشْكُو", "يَشْـ + كُـ + و", "Yach-koû", "Il se plaint", "", ""]
+    ];
+
+    const MOTS_DEFI = [
+      ["يَقْطَعُ", "يَقْـ + طَـ + عُ", "Yaq-ṭa-ʿou", "Il coupe", "qalqala"],
+      ["يَطْلُبُ", "يَطْـ + لُـ + بُ", "Yaṭ-lou-bou", "Il demande", "qalqala"],
+      ["يَبْحَثُ", "يَبْـ + حَـ + ثُ", "Yab-ḥa-thou", "Il cherche", "qalqala"],
+      ["يَجْلِسُ", "يَجْـ + لِـ + سُ", "Yaj-li-sou", "Il s'assoit", "qalqala"],
+      ["يَدْخُلُ", "يَدْ + خُـ + لُ", "Yad-khou-lou", "Il entre", "qalqala"],
+      ["يَتْرُكُ", "يَتْـ + رُ + كُ", "Yat-rou-kou", "Il laisse", "hams"],
+      ["يَكْتُبُ", "يَكْـ + تُـ + بُ", "Yak-tou-bou", "Il écrit", "hams"],
+      ["أَكْرَمَ", "أَكْـ + رَ + مَ", "Ak-ra-ma", "Honorer", "hams"],
+      ["أَنْعَمَ", "أَنْـ + عَـ + مَ", "An-ʿa-ma", "Combler de bienfaits", "noun"],
+      ["يَنْهَضُ", "يَنْـ + هَـ + ضُ", "Yan-ha-ḍou", "Il se lève", "noun"],
+      ["أَنْهَى", "أَنْـ + هَـ + ى", "An-hâ", "Terminer", "noun"],
+      ["يَصْبِرُ", "يَصْـ + بِـ + رُ", "Yaṣ-bi-rou", "Il patiente", "forte"],
+      ["يَخْرُجُ", "يَخْـ + رُ + جُ", "Yakh-rou-jou", "Il sort", "forte"],
+      ["يَضْرِبُ", "يَضْـ + رِ + بُ", "Yaḍ-ri-bou", "Il frappe", "forte"],
+      ["يَسْتَغْفِرُ", "يَسْـ + تَغْـ + فِـ + رُ", "Yas-tagh-fi-rou", "Il demande pardon", "double"],
+      ["يَسْتَخْرِجُ", "يَسْـ + تَخْـ + رِ + جُ", "Yas-takh-ri-jou", "Il extrait", "double"]
+    ];
+
+    /* ===================== AFFICHAGE DES CARTES ===================== */
+    function carteLettre(l) {
+      return `<div class="letter-box ${l[3]}" onclick="speakArabic('${l[1]}', this)">
+        <div class="letter-read">${l[1]}</div>
+        <div class="letter-name">${l[2]}</div>
+      </div>`;
+    }
+    function carteMot(m) {
+      return `<div class="word-cell ${m[4] || ''}" onclick="speakArabic('${m[0]}', this)">
+        <span class="audio-tag">🔊</span>${m[5] ? '<span class="src-tag">↩ ' + m[5] + '</span>' : ''}
+        <div class="word-ar">${m[0]}</div>
+        <div class="word-parts">${m[1]}</div>
+        <div class="word-fr">${m[2]} (${m[3]})</div>
+      </div>`;
+    }
+    document.getElementById('grid-lettres').innerHTML = LETTRES.map(carteLettre).join('');
+    document.getElementById('mots-lecon').innerHTML = MOTS_LECON.map(carteMot).join('');
+    document.getElementById('mots-defi').innerHTML = MOTS_DEFI.map(carteMot).join('');
+
+    /* ===================== AUDIO : VOIX ARABE FÉMININE ===================== */
+    const VOIX_FEMININES = ['zariyah','salma','hoda','amany','fatima','laila','layla','amina','rana','sana','noura','iman','mouna','aysha','amal','reem','maryam','female'];
+    const VOIX_MASCULINES = ['hamed','naayf','shakir','hamdan','ali','ismael','bassel','taim','fahed','rami','omar','jamal','abdullah','moaz','laith','hedi','saleh','maged','majed','tarik','male'];
+    let voixChoisie = null;
+
+    const contient = (nom, liste) => liste.some(n => nom.toLowerCase().includes(n));
+
+    function choisirVoix() {
+      const arabes = speechSynthesis.getVoices().filter(v => v.lang.toLowerCase().startsWith('ar'));
+      const prefererSA = l => l.find(v => v.lang.toLowerCase() === 'ar-sa') || l[0] || null;
+      const feminines = arabes.filter(v => contient(v.name, VOIX_FEMININES));
+      const inconnues = arabes.filter(v => !contient(v.name, VOIX_FEMININES) && !contient(v.name, VOIX_MASCULINES));
+      return prefererSA(feminines) || prefererSA(inconnues); // jamais une voix masculine connue
+    }
+
+    function majVoix() {
+      voixChoisie = choisirVoix();
+      const s = document.getElementById('voice-status');
+      if (s) s.textContent = voixChoisie ? '🔊 Voix : ' + voixChoisie.name : '⚠️ Aucune voix arabe féminine sur cet appareil';
+    }
+
+    if ('speechSynthesis' in window) {
+      majVoix();
+      speechSynthesis.onvoiceschanged = majVoix; // les voix se chargent en différé
+    }
+
+    /* ===== VOYELLE FINALE =====
+       Seule, la voix lit le mot "en pause" (waqf) et supprime la voyelle finale : أَسْلَمَ → « aslam ».
+       Pour l'audio uniquement, on ajoute la lettre de prolongation correspondante (ـَ → ا, ـُ → و, ـِ → ي)
+       afin que la voyelle finale soit entendue. L'affichage du mot ne change pas.
+       Mettre false pour revenir à la lecture "en pause". */
+    const PRONONCER_VOYELLE_FINALE = true;
+    const PROLONGATION = { 'َ': 'ا', 'ُ': 'و', 'ِ': 'ي' };
+
+    function texteAudio(text) {
+      if (!PRONONCER_VOYELLE_FINALE) return text;
+      const derniere = text.slice(-1);
+      return PROLONGATION[derniere] ? text + PROLONGATION[derniere] : text;
+    }
+
+    function speakArabic(text, element) {
+      if (!('speechSynthesis' in window)) { alert("La synthèse vocale n'est pas supportée sur ce navigateur."); return; }
+      if (!voixChoisie) majVoix();
+      if (!voixChoisie) { alert("Aucune voix arabe féminine disponible sur cet appareil. Essaie avec Microsoft Edge."); return; }
+      speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(texteAudio(text));
+      u.voice = voixChoisie;
+      u.lang = voixChoisie.lang;
+      u.rate = 0.85;
+      if (element) {
+        element.classList.add('playing');
+        u.onend = u.onerror = () => element.classList.remove('playing');
+      }
+      speechSynthesis.speak(u);
+    }
+  </script>
+</body>
+</html>
