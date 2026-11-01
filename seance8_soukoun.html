@@ -323,40 +323,42 @@
     document.getElementById('mots-lecon').innerHTML = MOTS_LECON.map(carteMot).join('');
     document.getElementById('mots-defi').innerHTML = MOTS_DEFI.map(carteMot).join('');
 
-    /* ===================== AUDIO : VOIX ARABE FÉMININE ===================== */
-    const VOIX_FEMININES = ['zariyah','salma','hoda','amany','fatima','laila','layla','amina','rana','sana','noura','iman','mouna','aysha','amal','reem','maryam','female'];
-    const VOIX_MASCULINES = ['hamed','naayf','shakir','hamdan','ali','ismael','bassel','taim','fahed','rami','omar','jamal','abdullah','moaz','laith','hedi','saleh','maged','majed','tarik','male'];
+    /* ===================== AUDIO (ordinateur, Android, iPhone) =====================
+       Ordre de choix : 1) voix arabe féminine connue  2) n'importe quelle voix arabe
+       3) aucune voix listée : on laisse le téléphone choisir sa voix arabe (lang = ar-SA).
+       Le son n'est jamais bloqué. */
+    const VOIX_FEMININES = ['zariyah','salma','hoda','amany','fatima','laila','layla','amina','rana','sana','noura','iman','mouna','aysha','amal','reem','maryam','mariam','female','femme','woman'];
     let voixChoisie = null;
 
-    const contient = (nom, liste) => liste.some(n => nom.toLowerCase().includes(n));
+    const contient = (nom, liste) => liste.some(n => (nom || '').toLowerCase().includes(n));
+    const estArabe = v => (v.lang || '').toLowerCase().replace('_', '-').startsWith('ar');
 
     function choisirVoix() {
-      const arabes = speechSynthesis.getVoices().filter(v => v.lang.toLowerCase().startsWith('ar'));
-      const prefererSA = l => l.find(v => v.lang.toLowerCase() === 'ar-sa') || l[0] || null;
+      if (!('speechSynthesis' in window)) return null;
+      const arabes = speechSynthesis.getVoices().filter(estArabe);
+      if (!arabes.length) return null;
+      const prefererSA = l => l.find(v => v.lang.toLowerCase().replace('_', '-') === 'ar-sa') || l[0] || null;
       const feminines = arabes.filter(v => contient(v.name, VOIX_FEMININES));
-      const inconnues = arabes.filter(v => !contient(v.name, VOIX_FEMININES) && !contient(v.name, VOIX_MASCULINES));
-      return prefererSA(feminines) || prefererSA(inconnues); // jamais une voix masculine connue
+      return prefererSA(feminines) || prefererSA(arabes);
     }
 
     function majVoix() {
       voixChoisie = choisirVoix();
       const s = document.getElementById('voice-status');
-      if (s) s.textContent = voixChoisie ? '🔊 Voix : ' + voixChoisie.name : '⚠️ Aucune voix arabe féminine sur cet appareil';
+      if (s) s.textContent = voixChoisie ? '🔊 Voix : ' + voixChoisie.name : '🔊 Voix arabe par défaut du téléphone';
     }
 
     if ('speechSynthesis' in window) {
       majVoix();
-      speechSynthesis.onvoiceschanged = majVoix; // les voix se chargent en différé
+      if ('onvoiceschanged' in speechSynthesis) speechSynthesis.onvoiceschanged = majVoix;
+      setTimeout(majVoix, 800); // certains téléphones chargent les voix en retard
     }
 
-    /* ===== VOYELLE FINALE =====
-       Seule, la voix lit le mot "en pause" (waqf) et supprime la voyelle finale : أَسْلَمَ → « aslam ».
-       Pour l'audio uniquement, on ajoute la lettre de prolongation correspondante (ـَ → ا, ـُ → و, ـِ → ي)
-       afin que la voyelle finale soit entendue. L'affichage du mot ne change pas.
+    /* Voyelle finale : seule, la voix lit le mot "en pause" et supprime la voyelle finale.
+       Pour l'audio uniquement, on ajoute la lettre de prolongation correspondante.
        Mettre false pour revenir à la lecture "en pause". */
     const PRONONCER_VOYELLE_FINALE = true;
     const PROLONGATION = { 'َ': 'ا', 'ُ': 'و', 'ِ': 'ي' };
-
     function texteAudio(text) {
       if (!PRONONCER_VOYELLE_FINALE) return text;
       const derniere = text.slice(-1);
@@ -364,17 +366,17 @@
     }
 
     function speakArabic(text, element) {
-      if (!('speechSynthesis' in window)) { alert("La synthèse vocale n'est pas supportée sur ce navigateur."); return; }
+      if (!('speechSynthesis' in window)) { alert("La synthèse vocale n'est pas disponible sur ce navigateur."); return; }
       if (!voixChoisie) majVoix();
-      if (!voixChoisie) { alert("Aucune voix arabe féminine disponible sur cet appareil. Essaie avec Microsoft Edge."); return; }
-      speechSynthesis.cancel();
+      if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(texteAudio(text));
-      u.voice = voixChoisie;
-      u.lang = voixChoisie.lang;
+      u.lang = 'ar-SA';
+      if (voixChoisie) { u.voice = voixChoisie; u.lang = voixChoisie.lang; }
       u.rate = 0.85;
       if (element) {
         element.classList.add('playing');
         u.onend = u.onerror = () => element.classList.remove('playing');
+        setTimeout(() => element.classList.remove('playing'), 6000);
       }
       speechSynthesis.speak(u);
     }
