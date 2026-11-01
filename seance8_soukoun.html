@@ -219,7 +219,6 @@
         </div>
       </div>
       <div class="page-footer-note">★ Audio interactif natif au clic • Page 3 / 3</div>
-      <div id="voice-status" class="page-footer-note"></div>
     </div>
   </div>
 
@@ -323,35 +322,22 @@
     document.getElementById('mots-lecon').innerHTML = MOTS_LECON.map(carteMot).join('');
     document.getElementById('mots-defi').innerHTML = MOTS_DEFI.map(carteMot).join('');
 
-    /* ===================== AUDIO (ordinateur, Android, iPhone) =====================
-       Ordre de choix : 1) voix arabe féminine connue  2) n'importe quelle voix arabe
-       3) aucune voix listée : on laisse le téléphone choisir sa voix arabe (lang = ar-SA).
-       Le son n'est jamais bloqué. */
-    const VOIX_FEMININES = ['zariyah','salma','hoda','amany','fatima','laila','layla','amina','rana','sana','noura','iman','mouna','aysha','amal','reem','maryam','mariam','female','femme','woman'];
-    let voixChoisie = null;
+    /* ===================== AUDIO (mêmes paramètres que la séance 5) =====================
+       Première voix arabe disponible sur l'appareil ; sinon le téléphone choisit sa voix arabe. */
+    let synth = window.speechSynthesis;
+    let arabicVoice = null;
 
-    const contient = (nom, liste) => liste.some(n => (nom || '').toLowerCase().includes(n));
-    const estArabe = v => (v.lang || '').toLowerCase().replace('_', '-').startsWith('ar');
-
-    function choisirVoix() {
-      if (!('speechSynthesis' in window)) return null;
-      const arabes = speechSynthesis.getVoices().filter(estArabe);
-      if (!arabes.length) return null;
-      const prefererSA = l => l.find(v => v.lang.toLowerCase().replace('_', '-') === 'ar-sa') || l[0] || null;
-      const feminines = arabes.filter(v => contient(v.name, VOIX_FEMININES));
-      return prefererSA(feminines) || prefererSA(arabes);
+    function loadVoices() {
+      if (!synth) return;
+      let voices = synth.getVoices();
+      arabicVoice = voices.find(v => v.lang.startsWith('ar')) || null;
     }
 
-    function majVoix() {
-      voixChoisie = choisirVoix();
-      const s = document.getElementById('voice-status');
-      if (s) s.textContent = voixChoisie ? '🔊 Voix : ' + voixChoisie.name : '🔊 Voix arabe par défaut du téléphone';
-    }
-
-    if ('speechSynthesis' in window) {
-      majVoix();
-      if ('onvoiceschanged' in speechSynthesis) speechSynthesis.onvoiceschanged = majVoix;
-      setTimeout(majVoix, 800); // certains téléphones chargent les voix en retard
+    if (synth) {
+      if (speechSynthesis.onvoiceschanged !== undefined) {
+        speechSynthesis.onvoiceschanged = loadVoices;
+      }
+      loadVoices();
     }
 
     /* Voyelle finale : seule, la voix lit le mot "en pause" et supprime la voyelle finale.
@@ -366,19 +352,29 @@
     }
 
     function speakArabic(text, element) {
-      if (!('speechSynthesis' in window)) { alert("La synthèse vocale n'est pas disponible sur ce navigateur."); return; }
-      if (!voixChoisie) majVoix();
-      if (speechSynthesis.speaking || speechSynthesis.pending) speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(texteAudio(text));
-      u.lang = 'ar-SA';
-      if (voixChoisie) { u.voice = voixChoisie; u.lang = voixChoisie.lang; }
-      u.rate = 0.85;
+      if (!('speechSynthesis' in window)) {
+        alert("La synthèse vocale n'est pas supportée par votre navigateur.");
+        return;
+      }
+
+      synth.cancel();
+
+      let utterance = new SpeechSynthesisUtterance(texteAudio(text));
+      utterance.lang = 'ar-SA';
+      utterance.rate = 0.85;
+
+      if (arabicVoice) {
+        utterance.voice = arabicVoice;
+      }
+
+      document.querySelectorAll('.playing').forEach(c => c.classList.remove('playing'));
       if (element) {
         element.classList.add('playing');
-        u.onend = u.onerror = () => element.classList.remove('playing');
-        setTimeout(() => element.classList.remove('playing'), 6000);
+        utterance.onend = function() { element.classList.remove('playing'); };
+        utterance.onerror = function() { element.classList.remove('playing'); };
       }
-      speechSynthesis.speak(u);
+
+      synth.speak(utterance);
     }
   </script>
 </body>
