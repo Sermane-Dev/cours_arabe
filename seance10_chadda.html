@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Synthèse Express — Séance 10 (Chadda, suite)</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap');
+
+    @page { size: A4 portrait; margin: 10mm; }
+    * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; color: #0f172a; display: flex; flex-direction: column; align-items: center; padding: 20px 0; }
+    .page { width: 210mm; min-height: 297mm; background: #ffffff; padding: 14mm 16mm; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; justify-content: space-between; page-break-after: always; position: relative; }
+    .header-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #0284c7; padding-bottom: 8px; margin-bottom: 10px; gap: 10px; }
+    .badge-session { background: #e0f2fe; color: #0369a1; font-size: 11.5px; font-weight: 700; padding: 3px 10px; border-radius: 9999px; display: inline-block; margin-bottom: 4px; }
+    .page-title { font-size: 20px; font-weight: 800; color: #0f172a; letter-spacing: -0.3px; }
+    .header-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; text-decoration: none; transition: all 0.15s ease; }
+    .btn-outline { background: #ffffff; color: #334155; border: 1px solid #cbd5e1; }
+    .btn-primary { background: #0284c7; color: #ffffff; border: 1px solid #0284c7; }
+    .guide-strip { background: #f8fafc; border-left: 4px solid #0284c7; padding: 7px 12px; font-size: 12px; color: #334155; border-radius: 0 8px 8px 0; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .guide-strip .ar-inline { font-family: 'Amiri', serif; font-size: 16px; }
+    .method-strip { background: #f0fdf4; border: 1.5px solid #bbf7d0; border-radius: 8px; padding: 7px 12px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .method-title { font-size: 12px; font-weight: 800; color: #166534; text-transform: uppercase; }
+    .method-steps { display: flex; align-items: center; gap: 10px; font-size: 12px; color: #14532d; }
+    .step-pill { background: #ffffff; border: 1px solid #86efac; padding: 2px 7px; border-radius: 6px; font-weight: 600; }
+
+    /* Légende des cas particuliers */
+    .legend { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; font-size: 10.5px; }
+    .chip { padding: 2px 9px; border-radius: 9999px; border: 1px solid; font-weight: 600; }
+    .chip.qalqala { background: #fff7ed; border-color: #fdba74; color: #9a3412; }
+    .chip.hams    { background: #faf5ff; border-color: #d8b4fe; color: #6b21a8; }
+    .chip.noun    { background: #f0fdfa; border-color: #5eead4; color: #115e59; }
+    .chip.forte   { background: #fef2f2; border-color: #fca5a5; color: #991b1b; }
+    .chip.lin     { background: #f8fafc; border-color: #94a3b8; color: #334155; border-style: dashed; }
+    .chip.double  { background: #f1f5f9; border-color: #475569; color: #0f172a; }
+
+    /* Page 1 : lettres */
+    .grid-alphabet { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(7, 1fr); gap: 7px; direction: rtl; flex: 1; margin-bottom: 10px; }
+    .letter-box { border: 1.5px solid #cbd5e1; border-radius: 9px; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 3px 6px; text-align: center; cursor: pointer; transition: all 0.15s ease; }
+    .letter-box:hover { border-color: #0284c7; background: #f0f9ff; transform: translateY(-1px); }
+    .letter-box.qalqala { background: #fff7ed; border-color: #fdba74; }
+    .letter-box.hams    { background: #faf5ff; border-color: #d8b4fe; }
+    .letter-box.noun    { background: #f0fdfa; border-color: #5eead4; }
+    .letter-box.forte   { background: #fef2f2; border-color: #fca5a5; }
+    .letter-box.lin     { background: #f8fafc; border-color: #94a3b8; border-style: dashed; }
+    .letter-read { font-family: 'Amiri', serif; font-size: 40px; color: #0284c7; direction: rtl; line-height: 1.3; }
+    .letter-name { font-size: 10.5px; font-weight: 600; color: #64748b; margin-top: 4px; direction: ltr; }
+
+    /* Pages 2 et 3 : mots */
+    .words-board { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(6, 1fr); gap: 8px; direction: rtl; flex: 1; margin-bottom: 10px; }
+    .words-board.defi { grid-template-rows: repeat(4, 1fr); }
+    .word-cell { border: 1.5px solid #e2e8f0; border-radius: 9px; background: #ffffff; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 6px 4px; text-align: center; cursor: pointer; position: relative; transition: all 0.15s ease; user-select: none; }
+    .word-cell:hover { border-color: #0284c7; background: #f0f9ff; transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(2, 132, 199, 0.15); }
+    .word-cell.qalqala { border-top: 4px solid #f97316; }
+    .word-cell.hams    { border-top: 4px solid #a855f7; }
+    .word-cell.noun    { border-top: 4px solid #14b8a6; }
+    .word-cell.forte   { border-top: 4px solid #ef4444; }
+    .word-cell.double  { border-top: 4px solid #0f172a; }
+    .word-cell:active, .word-cell.playing, .letter-box.playing { border-color: #16a34a !important; background: #ecfdf5 !important; transform: scale(0.98); }
+    .audio-tag { position: absolute; top: 4px; left: 6px; font-size: 10px; color: #94a3b8; }
+    .src-tag { position: absolute; top: 4px; right: 6px; font-size: 9px; font-weight: 700; color: #7c3aed; background: #f5f3ff; padding: 0 5px; border-radius: 4px; direction: ltr; }
+    .word-cell:hover .audio-tag { color: #0284c7; }
+    .word-ar { font-family: 'Amiri', serif; font-size: 31px; color: #0f172a; line-height: 1.1; margin-bottom: 2px; }
+    .word-parts { font-family: 'Amiri', serif; font-size: 15px; color: #0284c7; direction: rtl; }
+    .word-fr { font-size: 9.5px; color: #64748b; direction: ltr; font-weight: 500; }
+
+    .homework-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 7px 12px; margin-bottom: 8px; font-size: 11px; color: #334155; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .homework-box .ar-inline { font-family: 'Amiri', serif; font-size: 15px; }
+    .footer-bar { background: #0f172a; color: #f8fafc; padding: 9px 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; gap: 10px; }
+    .footer-bar .ar-inline { font-family: 'Amiri', serif; font-size: 15px; }
+    .footer-actions { display: flex; gap: 6px; }
+    .btn-footer { background: #1e293b; color: #f1f5f9; border: 1px solid #334155; padding: 4px 8px; border-radius: 6px; font-size: 10.5px; text-decoration: none; white-space: nowrap; }
+    .btn-footer:hover { background: #334155; }
+    .page-footer-note { text-align: center; font-size: 10px; color: #94a3b8; padding-top: 4px; }
+
+    @media print {
+      body { background-color: transparent; padding: 0; }
+      .page { margin: 0; box-shadow: none; width: 100%; min-height: 100vh; }
+      #voice-status { display: none; }
+    }
+
+    /* Smartphone */
+    @media (max-width: 820px) {
+      body { padding: 0; }
+      .page { width: 100%; min-height: auto; padding: 16px 12px; margin-bottom: 10px; box-shadow: none; }
+      .header-bar, .guide-strip, .method-strip, .homework-box, .footer-bar { flex-wrap: wrap; }
+      .page-title { font-size: 17px; }
+      .method-steps, .footer-actions { flex-wrap: wrap; gap: 6px; }
+      .grid-alphabet { grid-template-columns: repeat(4, 1fr); grid-template-rows: none; }
+      .words-board, .words-board.defi { grid-template-columns: repeat(2, 1fr); grid-template-rows: none; }
+      .letter-box { padding: 8px 2px; }
+      .word-cell { padding: 14px 4px 8px; }
+    }
+  
+    .letter-read { font-family: 'Amiri', serif; font-size: 40px; color: #0284c7; direction: rtl; line-height: 1.3; }
+    .letter-box.info { background: #0f172a; border-color: #0f172a; color: #f8fafc; font-size: 11px; cursor: default; direction: ltr; line-height: 1.4; }
+    .letter-box.info .ar-inline { font-family: 'Amiri', serif; font-size: 18px; color: #7dd3fc; }
+    .num-tag { position: absolute; bottom: 3px; left: 6px; font-size: 8.5px; color: #cbd5e1; direction: ltr; }
+    .letter-box { position: relative; }
+    .words-board.s9 { grid-template-rows: repeat(3, 1fr); }
+    .word-ar { font-size: 38px; }
+    .word-parts { font-size: 18px; }
+    .word-fr { font-size: 10.5px; }
+    .word-cell.contrast { border-top: 4px solid #ef4444; }
+    .word-cell.kasra { border-top: 4px solid #a855f7; }
+    .word-cell.hamza { border-top: 4px solid #f59e0b; }
+    @media (max-width: 820px) { .words-board.s9 { grid-template-rows: none; } }
+
+    .letter-box.amber { background: #fffbeb; border-color: #fcd34d; }
+    .letter-box.hard { background: #f1f5f9; border-color: #64748b; }
+    .letter-box.purple { background: #faf5ff; border-color: #d8b4fe; }
+    .letter-box.red { background: #fef2f2; border-color: #fca5a5; }
+    .words-board.s10 { grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(6, 1fr); }
+    @media (max-width: 820px) { .words-board.s10 { grid-template-columns: repeat(2, 1fr); grid-template-rows: none; } }
+</style>
+</head>
+<body>
+
+  <!-- PAGE 1 : TABLEAU 1 -->
+  <div class="page">
+    <div>
+      <div class="header-bar">
+        <div>
+          <span class="badge-session">⚡ Synthèse Express • Séance 10</span>
+          <h1 class="page-title">Tableau 1 : les Lettres avec Chadda (appui بَ)</h1>
+        </div>
+        <div class="header-actions">
+          <a href="https://drive.google.com/drive/folders/1b0MfjPlFVzM5XG2ou5QduwwbKc24lFYU?usp=sharing" target="_blank" class="btn btn-outline">📁 Drive</a>
+          <a href="https://drive.google.com/file/d/1XfXdkAK_TSwM2sqPGBItmB4q0KqUhc1k/view?usp=drive_link" target="_blank" class="btn btn-primary">📄 Fiche Détaillée</a>
+        </div>
+      </div>
+      <div class="guide-strip">
+        <span>💡 <b>Règle :</b> même lettre avec Soukoûn + même lettre voyellée = Chadda (<span class="ar-inline">بْ + بَ = بَّ</span>). On tient <b>environ 1 seconde, toujours la même durée</b>, sans coupure : la langue reste au même endroit.</span>
+        <span style="font-size: 11px; color: #64748b; white-space: nowrap;">🔊 Clique pour écouter</span>
+      </div>
+      <div class="legend">
+        <span class="chip" style="background:#fffbeb;border-color:#fcd34d;color:#92400e;">🟡 Hamza : pas de son final</span>
+        <span class="chip" style="background:#f1f5f9;border-color:#64748b;color:#334155;">⚪ Ḥâ / Hâ : bien distinguer</span>
+        <span class="chip hams">🟣 Râ léger avec Kasra</span>
+        <span class="chip forte">🔴 Ḍâd : sans rebond</span>
+      </div>
+    </div>
+
+    <div class="grid-alphabet" id="grid-lettres"></div>
+
+    <div>
+      <div class="footer-bar">
+        <span>☁️ Espace Drive Écolier</span>
+        <div class="footer-actions">
+          <a href="https://drive.google.com/file/d/1XfXdkAK_TSwM2sqPGBItmB4q0KqUhc1k/view?usp=drive_link" target="_blank" class="btn-footer">📄 Fiche Complète</a>
+          <a href="https://drive.google.com/drive/folders/1b0MfjPlFVzM5XG2ou5QduwwbKc24lFYU?usp=sharing" target="_blank" class="btn-footer">📁 Drive</a>
+          <a href="https://drive.google.com/drive/folders/1qRy1tykxToM94UQPvGXDc1Ub4il6IQqD?usp=drive_link" target="_blank" class="btn-footer">📷 2. Photos écriture</a>
+          <a href="https://drive.google.com/drive/folders/1cQT0e1n81IPTUGHvInQFnZZ8BOkzgL0i?usp=drive_link" target="_blank" class="btn-footer">🎙️ 3. Audios</a>
+        </div>
+      </div>
+      <div class="page-footer-note">★ Audio interactif au clic • Page 1 / 2</div>
+    </div>
+  </div>
+
+  <!-- PAGE 2 : TABLEAU 2 -->
+  <div class="page">
+    <div>
+      <div class="header-bar">
+        <div>
+          <span class="badge-session">⚡ Séance 10 • Pratique de Lecture</span>
+          <h1 class="page-title">Tableau 2 : Verbes avec Chadda</h1>
+        </div>
+        <div class="header-actions">
+          <a href="https://drive.google.com/file/d/1XfXdkAK_TSwM2sqPGBItmB4q0KqUhc1k/view?usp=drive_link" target="_blank" class="btn btn-primary">📄 Fiche Slides PDF</a>
+        </div>
+      </div>
+      <div class="method-strip">
+        <div class="method-title">Rythme & Mesure :</div>
+        <div class="method-steps">
+          <span class="step-pill">1. Syllabe fermée</span>
+          <span>➔</span>
+          <span class="step-pill">2. Tenir ~1 seconde</span>
+          <span>➔</span>
+          <span class="step-pill">3. Lettre voyellée, sans coupure</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="words-board s10" id="mots"></div>
+
+    <div>
+      <div class="homework-box">
+        <span>⚠️ <b>La Chadda change le sens :</b> <span class="ar-inline">دَرَسَ</span> (étudier) ≠ <span class="ar-inline">دَرَّسَ</span> (enseigner). <b>Découpage :</b> <span class="ar-inline">سَلْ – لَ – مَتْ</span> • <span class="ar-inline">حُرْ – رِ – مَتْ</span> (« ḥou », sans lettre en plus).</span>
+      </div>
+      <div class="footer-bar">
+        <span>☁️ Espace Drive Écolier</span>
+        <div class="footer-actions">
+          <a href="https://drive.google.com/file/d/1XfXdkAK_TSwM2sqPGBItmB4q0KqUhc1k/view?usp=drive_link" target="_blank" class="btn-footer">📄 Fiche Complète</a>
+          <a href="https://drive.google.com/drive/folders/1b0MfjPlFVzM5XG2ou5QduwwbKc24lFYU?usp=sharing" target="_blank" class="btn-footer">📁 Drive</a>
+          <a href="https://drive.google.com/drive/folders/1qRy1tykxToM94UQPvGXDc1Ub4il6IQqD?usp=drive_link" target="_blank" class="btn-footer">📷 2. Photos écriture</a>
+          <a href="https://drive.google.com/drive/folders/1cQT0e1n81IPTUGHvInQFnZZ8BOkzgL0i?usp=drive_link" target="_blank" class="btn-footer">🎙️ 3. Audios</a>
+        </div>
+      </div>
+      <div class="page-footer-note">★ Audio interactif au clic • Page 2 / 2</div>
+      <div class="page-footer-note">➡️ Prochaine leçon : le Tanwîn (<span class="ar-inline">ـً ـٍ ـٌ</span>)</div>
+    </div>
+  </div>
+
+  <script>
+    /* ===================== CONTENU =====================
+       Le numéro de chaque carte = le nom de son fichier audio : audio/seance10/01.mp3, 02.mp3... */
+    const LETTRES = [
+      ["بَأَّ","Hamza • ba’-’a","amber"],["بَبَّ","Bâ • bab-ba",""],["بَتَّ","Tâ • bat-ta",""],["بَثَّ","Thâ • bath-tha",""],
+      ["بَجَّ","Jîm • baj-ja",""],["بَحِّ","Ḥâ • baḥ-ḥi","hard"],["بَخِّ","Khâ • bakh-khi",""],["بَدِّ","Dâl • bad-di",""],
+      ["بَذِّ","Dhâl • badh-dhi",""],["بَرِّ","Râ léger • bar-ri","purple"],["بَزُّ","Zây • baz-zou",""],["بَسُّ","Sîn • bas-sou",""],
+      ["بَشُّ","Shîn • bach-chou",""],["بَصُّ","Ṣâd • baṣ-ṣou",""],["بَضُّ","Ḍâd • baḍ-ḍou","red"],["بَطَّ","Ṭâ • baṭ-ṭa",""],
+      ["بَظَّ","Ẓâ • baẓ-ẓa",""],["بَعَّ","ʿAyn • baʿ-ʿa",""],["بَغَّ","Ghayn • bagh-gha",""],["بَفَّ","Fâ • baf-fa",""],
+      ["بَقِّ","Qâf • baq-qi",""],["بَكِّ","Kâf • bak-ki",""],["بَلِّ","Lâm • bal-li",""],["بَمِّ","Mîm • bam-mi",""],
+      ["بَنِّ","Nûn • ban-ni",""],["بَهَّ","Hâ • bah-ha","hard"],["بَوَّ","Wâw • baw-wa",""],["بَيَّ","Yâ • bay-ya",""]
+    ];
+    // [mot, syllabes, phonétique, traduction]
+    const MOTS = [
+      ["أَسَّسَ","أَسْ – سَ – سَ","As-sa-sa","fonder"],
+      ["دَرَّسَ","دَرْ – رَ – سَ","Dar-ra-sa","enseigner"],
+      ["بَذَّرَ","بَذْ – ذَ – رَ","Badh-dha-ra","gaspiller"],
+      ["فَنَّدَ","فَنْ – نَ – دَ","Fan-na-da","réfuter"],
+      ["مَهَّدَ","مَهْ – هَ – دَ","Mah-ha-da","préparer, aplanir"],
+      ["بَدَّدَ","بَدْ – دَ – دَ","Bad-da-da","dissiper"],
+      ["وَحَّدَ","وَحْ – حَ – دَ","Waḥ-ḥa-da","unifier"],
+      ["مَجَّدَ","مَجْ – جَ – دَ","Maj-ja-da","glorifier"],
+      ["يُدَرِّسُ","يُ – دَرْ – رِ – سُ","You-dar-ri-sou","il enseigne"],
+      ["يُقِرُّ","يُ – قِرْ – رُ","You-qir-rou","il reconnaît"],
+      ["نُسِرُّ","نُ – سِرْ – رُ","Nou-sir-rou","nous confions"],
+      ["غَرَّدَ","غَرْ – رَ – دَ","Ghar-ra-da","gazouiller"],
+      ["تَدُرُّ","تَ – دُرْ – رُ","Ta-dour-rou","elle coule en abondance"],
+      ["سَلَّمَتْ","سَلْ – لَ – مَتْ","Sal-la-mat","elle a salué"],
+      ["قَلَّمَ","قَلْ – لَ – مَ","Qal-la-ma","tailler"],
+      ["أَضَلَّ","أَ – ضَلْ – لَ","A-ḍal-la","égarer"],
+      ["أَحَلَّ","أَ – حَلْ – لَ","A-ḥal-la","rendre licite"],
+      ["حُرِّمَتْ","حُرْ – رِ – مَتْ","Ḥour-ri-mat","elle a été interdite"]
+    ];
+
+    const num = n => String(n).padStart(2, '0');
+    let n = 0;
+    document.getElementById('grid-lettres').innerHTML = LETTRES.map(l => {
+      n++; return `<div class="letter-box ${l[2]}" onclick="speakArabic('${l[0]}', this, '${num(n)}')">
+        <div class="letter-read">${l[0]}</div><div class="letter-name">${l[1]}</div><span class="num-tag">${num(n)}</span></div>`;
+    }).join('');
+    document.getElementById('mots').innerHTML = MOTS.map(m => {
+      n++; return `<div class="word-cell" onclick="speakArabic('${m[0]}', this, '${num(n)}')">
+        <span class="audio-tag">🔊</span>
+        <div class="word-ar">${m[0]}</div>
+        <div class="word-parts">${m[1]}</div>
+        <div class="word-fr">${m[2]} (${m[3]})</div><span class="num-tag">${num(n)}</span></div>`;
+    }).join('');
+
+    /* ===================== AUDIO =====================
+       1) Si l'enregistrement existe (audio/seance10/NN.mp3), on joue ta voix.
+       2) Sinon, synthèse vocale avec les paramètres de la séance 5. */
+    const DOSSIER_AUDIO = 'audio/seance10/';
+    const absents = {};
+    let lecteur = null;
+
+    let synth = window.speechSynthesis;
+    let arabicVoice = null;
+    function loadVoices() {
+      if (!synth) return;
+      arabicVoice = synth.getVoices().find(v => v.lang.startsWith('ar')) || null;
+    }
+    if (synth) {
+      if (speechSynthesis.onvoiceschanged !== undefined) speechSynthesis.onvoiceschanged = loadVoices;
+      loadVoices();
+    }
+
+    function finLecture(element) { if (element) element.classList.remove('playing'); }
+
+    function syntheseVocale(text, element) {
+      if (!('speechSynthesis' in window)) { finLecture(element); return; }
+      synth.cancel();
+      let u = new SpeechSynthesisUtterance(text);
+      u.lang = 'ar-SA';
+      u.rate = 0.85;
+      if (arabicVoice) u.voice = arabicVoice;
+      u.onend = u.onerror = () => finLecture(element);
+      synth.speak(u);
+    }
+
+    function speakArabic(text, element, id) {
+      document.querySelectorAll('.playing').forEach(c => c.classList.remove('playing'));
+      if (lecteur) { lecteur.pause(); lecteur = null; }
+      if (synth) synth.cancel();
+      if (element) element.classList.add('playing');
+
+      if (!id || absents[id]) { syntheseVocale(text, element); return; }
+
+      lecteur = new Audio(DOSSIER_AUDIO + id + '.mp3');
+      lecteur.onended = () => finLecture(element);
+      lecteur.onerror = () => { absents[id] = true; syntheseVocale(text, element); };
+      const p = lecteur.play();
+      if (p && p.catch) p.catch(() => { if (!absents[id]) { absents[id] = true; syntheseVocale(text, element); } });
+    }
+  </script>
+</body>
+</html>
